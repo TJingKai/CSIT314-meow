@@ -1,0 +1,7 @@
+# Validation record
+
+All 23 API tests passed with Python 3.12 and the pinned Flask/Waitress dependencies. A live Waitress HTTP smoke check also passed for HTML/JS/CSS delivery, login, session/CSRF exchange, project queries and favourite persistence. See tests/test_api.py for executable cases using a fresh SQLite database and upload directory per test.
+
+Checks include authentication, HttpOnly/SameSite cookies, logout revocation, CSRF and Origin rejection, role enforcement, profile field allowlisting, search/empty results, invalid pagination/sort input, read-only detail GETs, explicit view POSTs, idempotent favourites, hidden project access, registration validation, pending designer approval, proof privacy, ownership, upload signatures, transactional project creation, cover selection, category deactivation, moderation, session revocation, Singapore reporting boundaries, password change, throttling, verification bypass prevention, admin-created designer onboarding, cascading deletion and separate customer favourite collections.
+
+Run the commands in README.md to repeat the checks. JavaScript syntax and Prettier formatting were checked; Python formatting and basic static checks used Ruff. The browser preview environment could not access the Python virtual environment, so browser UI interaction remains unverified for this full-stack package. The earlier hosted prototype's browser walkthrough does not count as validation of this implementation.
