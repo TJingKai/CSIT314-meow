@@ -1,0 +1,25 @@
+package com.meow.api;
+
+/** An expected validation, permission or resource error safe to show to the client. */
+public class ApiException extends RuntimeException {
+  private final int status;
+  private final String code;
+
+  public ApiException(int status, String code, String message) {
+    super(message);
+    this.status = status;
+    this.code = code;
+  }
+
+  public ApiException(String message) {
+    this(400, "validation_error", message);
+  }
+
+  public int status() {
+    return status;
+  }
+
+  public String code() {
+    return code;
+  }
+}
