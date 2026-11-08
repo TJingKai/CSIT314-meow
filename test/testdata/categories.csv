@@ -1,0 +1,101 @@
+category_id,name,is_available
+CAT-001,Kitchen - Modern,true
+CAT-002,Kitchen - Minimalist,true
+CAT-003,Kitchen - Scandinavian,true
+CAT-004,Kitchen - Industrial,true
+CAT-005,Kitchen - Rustic,true
+CAT-006,Kitchen - Contemporary,true
+CAT-007,Kitchen - Japandi,true
+CAT-008,Kitchen - Bohemian,true
+CAT-009,Kitchen - Classic,true
+CAT-010,Kitchen - Coastal,true
+CAT-011,Living Room - Modern,true
+CAT-012,Living Room - Minimalist,true
+CAT-013,Living Room - Scandinavian,true
+CAT-014,Living Room - Industrial,true
+CAT-015,Living Room - Rustic,true
+CAT-016,Living Room - Contemporary,true
+CAT-017,Living Room - Japandi,true
+CAT-018,Living Room - Bohemian,true
+CAT-019,Living Room - Classic,true
+CAT-020,Living Room - Coastal,false
+CAT-021,Bedroom - Modern,true
+CAT-022,Bedroom - Minimalist,true
+CAT-023,Bedroom - Scandinavian,true
+CAT-024,Bedroom - Industrial,true
+CAT-025,Bedroom - Rustic,true
+CAT-026,Bedroom - Contemporary,true
+CAT-027,Bedroom - Japandi,true
+CAT-028,Bedroom - Bohemian,true
+CAT-029,Bedroom - Classic,true
+CAT-030,Bedroom - Coastal,true
+CAT-031,Bathroom - Modern,true
+CAT-032,Bathroom - Minimalist,true
+CAT-033,Bathroom - Scandinavian,true
+CAT-034,Bathroom - Industrial,true
+CAT-035,Bathroom - Rustic,true
+CAT-036,Bathroom - Contemporary,true
+CAT-037,Bathroom - Japandi,true
+CAT-038,Bathroom - Bohemian,true
+CAT-039,Bathroom - Classic,true
+CAT-040,Bathroom - Coastal,false
+CAT-041,Office - Modern,true
+CAT-042,Office - Minimalist,true
+CAT-043,Office - Scandinavian,true
+CAT-044,Office - Industrial,true
+CAT-045,Office - Rustic,true
+CAT-046,Office - Contemporary,true
+CAT-047,Office - Japandi,true
+CAT-048,Office - Bohemian,true
+CAT-049,Office - Classic,true
+CAT-050,Office - Coastal,true
+CAT-051,Dining Room - Modern,true
+CAT-052,Dining Room - Minimalist,true
+CAT-053,Dining Room - Scandinavian,true
+CAT-054,Dining Room - Industrial,true
+CAT-055,Dining Room - Rustic,true
+CAT-056,Dining Room - Contemporary,true
+CAT-057,Dining Room - Japandi,true
+CAT-058,Dining Room - Bohemian,true
+CAT-059,Dining Room - Classic,true
+CAT-060,Dining Room - Coastal,false
+CAT-061,Balcony - Modern,true
+CAT-062,Balcony - Minimalist,true
+CAT-063,Balcony - Scandinavian,true
+CAT-064,Balcony - Industrial,true
+CAT-065,Balcony - Rustic,true
+CAT-066,Balcony - Contemporary,true
+CAT-067,Balcony - Japandi,true
+CAT-068,Balcony - Bohemian,true
+CAT-069,Balcony - Classic,true
+CAT-070,Balcony - Coastal,true
+CAT-071,Kids Room - Modern,true
+CAT-072,Kids Room - Minimalist,true
+CAT-073,Kids Room - Scandinavian,true
+CAT-074,Kids Room - Industrial,true
+CAT-075,Kids Room - Rustic,true
+CAT-076,Kids Room - Contemporary,true
+CAT-077,Kids Room - Japandi,true
+CAT-078,Kids Room - Bohemian,true
+CAT-079,Kids Room - Classic,true
+CAT-080,Kids Room - Coastal,false
+CAT-081,Entryway - Modern,true
+CAT-082,Entryway - Minimalist,true
+CAT-083,Entryway - Scandinavian,true
+CAT-084,Entryway - Industrial,true
+CAT-085,Entryway - Rustic,true
+CAT-086,Entryway - Contemporary,true
+CAT-087,Entryway - Japandi,true
+CAT-088,Entryway - Bohemian,true
+CAT-089,Entryway - Classic,true
+CAT-090,Entryway - Coastal,true
+CAT-091,Study - Modern,true
+CAT-092,Study - Minimalist,true
+CAT-093,Study - Scandinavian,true
+CAT-094,Study - Industrial,true
+CAT-095,Study - Rustic,true
+CAT-096,Study - Contemporary,true
+CAT-097,Study - Japandi,true
+CAT-098,Study - Bohemian,true
+CAT-099,Study - Classic,true
+CAT-100,Study - Coastal,false
