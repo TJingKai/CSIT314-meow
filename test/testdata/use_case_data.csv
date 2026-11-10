@@ -1,0 +1,84 @@
+uc_id,name,key,value
+UC#220,Fill Customer Registration Form,valid_password,Str0ng!Pass1
+UC#220,Fill Customer Registration Form,mismatch_password,Different!Pass2
+UC#220,Fill Customer Registration Form,bad_email,not-an-email
+UC#220,Fill Customer Registration Form,msg_invalid_email,Invalid email format
+UC#220,Fill Customer Registration Form,msg_mismatch,Passwords do not match
+UC#221,Create Customer Account,password,Str0ng!Pass1
+UC#221,Create Customer Account,msg_success,Account created successfully
+UC#221,Create Customer Account,msg_dup,Email is already registered
+UC#222,Register Interior Designer Account,password,Str0ng!Pass1
+UC#222,Register Interior Designer Account,proof_file,business_proof.pdf
+UC#222,Register Interior Designer Account,msg_success,Application submitted successfully
+UC#222,Register Interior Designer Account,msg_dup,Email is already registered
+UC#223,Set Account Pending Verification,msg_success,Application submitted successfully
+UC#224,Log In,msg_success,Login successful
+UC#224,Log In,msg_suspended,This account does not have active access.
+UC#224,Log In,msg_wrong,Email or password is incorrect.
+UC#225,Log Out,msg_success,Logged out successfully
+UC#226,Role-Based Screens,-,-
+UC#227,Search Accounts,no_match_keyword,zzzzzz-no-such-account
+UC#227,Search Accounts,msg_no_match,No accounts found
+UC#228,Create Account for Any Role,password,Str0ng!Pass1
+UC#228,Create Account for Any Role,roles,"customer,designer,admin,manager"
+UC#228,Create Account for Any Role,msg_success,Account created successfully
+UC#228,Create Account for Any Role,msg_mismatch,Passwords do not match
+UC#228,Create Account for Any Role,msg_dup,Email is already in use
+UC#229,Suspend or Reactivate Account,msg_success,Account status updated successfully
+UC#229,Suspend or Reactivate Account,msg_own,You cannot change your own status.
+UC#230,Delete Account,msg_success,Account deleted successfully
+UC#230,Delete Account,msg_own,You cannot delete your own account.
+UC#231,Edit Company Details,year,2016
+UC#231,Edit Company Details,msg_success,Company details saved successfully
+UC#231,Edit Company Details,msg_dup_uen,UEN is already registered
+UC#232,Public Company Profile,unknown_id,no-such-designer
+UC#232,Public Company Profile,msg_not_found,Designer profile not found
+UC#256,Approve or Reject Designer,msg_approved,Designer approved successfully
+UC#256,Approve or Reject Designer,msg_rejected,Designer registration rejected
+UC#256,Approve or Reject Designer,msg_no_proof,Business proof is required before approval.
+UC#256,Approve or Reject Designer,no_proof_designer,sam@meow.demo
+UC#233,Create IDP,msg_success,IDP created successfully
+UC#234,Upload Photos and Choose Cover,photos,3
+UC#234,Upload Photos and Choose Cover,cover,1
+UC#234,Upload Photos and Choose Cover,bad_cover,9
+UC#234,Upload Photos and Choose Cover,msg_success,Photos uploaded successfully
+UC#234,Upload Photos and Choose Cover,msg_cover,Choose a valid cover image.
+UC#234,Upload Photos and Choose Cover,msg_type,"Use PNG, JPEG or WebP images; business proof also accepts PDF."
+UC#235,Edit IDP,msg_success,IDP updated successfully
+UC#236,View Own IDP List,-,-
+UC#237,Search Published IDPs,-,-
+UC#238,View Search Results,no_match_keyword,zzzzzz
+UC#238,View Search Results,msg_no_match,No projects match your search
+UC#239,View IDP Details and Gallery,unknown_id,no-such-idp
+UC#239,View IDP Details and Gallery,msg_not_found,Resource not found.
+UC#240,Company Link from IDP,unknown_id,no-such-idp
+UC#240,Company Link from IDP,msg_not_found,Resource not found.
+UC#241,Record IDP View,-,-
+UC#242,Save Favourite without Duplicates,msg_success,Saved to favourites
+UC#242,Save Favourite without Duplicates,msg_dup,Already in your favourites
+UC#243,Record IDP Shortlist,-,-
+UC#244,Portfolio Totals,-,-
+UC#245,Stats per IDP,-,-
+UC#263,Publish or Unpublish IDP,msg_publish,IDP published successfully
+UC#263,Publish or Unpublish IDP,msg_unpublish,IDP unpublished
+UC#266,Assign IDP Categories,invalid_category,no-such-category
+UC#266,Assign IDP Categories,msg_success,Categories saved successfully
+UC#266,Assign IDP Categories,msg_none,Select at least one category
+UC#266,Assign IDP Categories,msg_invalid,Choose available categories only.
+UC#273,View Favourites List,-,-
+UC#246,Create Category,name,UC Category
+UC#246,Create Category,description,Created by the use-case test
+UC#246,Create Category,msg_success,Category created successfully
+UC#246,Create Category,msg_empty,Category name is required
+UC#246,Create Category,msg_dup,Category already exists
+UC#247,Edit Category,msg_success,Category updated successfully
+UC#247,Edit Category,msg_empty,Category name is required
+UC#247,Edit Category,msg_dup,Category already exists
+UC#248,Make Category Available,msg_off,Category is unavailable for IDP creation
+UC#248,Make Category Available,msg_on,Category is now available for IDP creation
+UC#249,Select Report Period,periods,"daily,weekly,monthly"
+UC#249,Select Report Period,msg_future,Date cannot be in the future
+UC#250,Generate Activity Totals,empty_date,2000-01-05
+UC#250,Generate Activity Totals,msg_none,No activity in this period
+UC#251,View Daily Report Table,empty_date,2000-01-05
+UC#251,View Daily Report Table,msg_none,No activity in this period

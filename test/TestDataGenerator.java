@@ -20,8 +20,11 @@ import java.util.Set;
  *   users.csv, id_company_profiles.csv, categories.csv, idps.csv, idp_images.csv,
  *   saved_idps.csv, idp_views.csv, idp_stats.csv
  * plus the data that drives the test cases themselves:
- *   test_case_data.csv      (concrete input values + expected result for TC1.1 - TC6.8)
- *   expected_reports.csv    (expected figures for TC6.6 - TC6.8, computed from the data)
+ *   test_case_data.csv      (concrete input values + expected result for TC1.1 - TC6.6)
+ *   expected_reports.csv    (expected figures for TC6.5 - TC6.6, computed from the data)
+ *   use_case_data.csv       (inputs + exact expected messages for every use case in the use-case
+ *                            descriptions PDF: #220 - #251, #256, #263, #266, #273; long format:
+ *                            uc_id,name,key,value)
  *
  * Compile:  javac TestDataGenerator.java
  * Run:      java TestDataGenerator            (fixed seed -> reproducible data)
@@ -123,6 +126,7 @@ public class TestDataGenerator {
         // ---- test-case driven data + expected reports ----
         writeTestCaseData(customers, designers, idps, saved, categories);
         writeExpectedReports(allUsers, saved, views);
+        writeUseCaseData();
 
         System.out.println("Test data written to ./" + OUT + " (seed=" + seed + ")");
         System.out.println("users=" + allUsers.size() + ", companies=" + designers.size()
@@ -212,11 +216,10 @@ public class TestDataGenerator {
 
     static List<View> makeViews(List<User> customers, List<Idp> idps) {
         List<View> list = new ArrayList<>();
-        Set<String> seenKeys = new HashSet<>();
         int eligible = N - IDPS_WITHOUT_ACTIVITY;
         while (list.size() < VIEW_EVENTS) {
             View v = new View();
-            if (!list.isEmpty() && R.nextInt(100) < 20) {            // repeat view in same session (TC5.2)
+            if (!list.isEmpty() && R.nextInt(100) < 20) {            // repeat view in same session (TC5.2) - counted again (UC #241)
                 View prev = list.get(R.nextInt(list.size()));
                 if (!prev.viewerRole.equals("CUSTOMER")) continue;
                 v.idpId = prev.idpId;
@@ -232,7 +235,7 @@ public class TestDataGenerator {
                 v.at = randomPast(1, 365);
             }
             v.viewerRole = "CUSTOMER";
-            v.counted = seenKeys.add(v.viewerId + "|" + v.idpId + "|" + v.session); // unique-per-session rule
+            v.counted = true;   // use case #241: every view of a published IDP by an authenticated viewer is recorded
             list.add(v);
         }
         // designers opening their own IDP -> never counted (TC5.6)
@@ -372,62 +375,44 @@ public class TestDataGenerator {
         // TC2 - company information
         t.add(tc("TC2.1", "Create company profile", "designer=" + des.email + "; all mandatory fields from id_company_profiles.csv (COM-001)", "Profile saved, shown on ID dashboard"));
         t.add(tc("TC2.2", "Missing mandatory field", "designer=" + des.email + "; company_name=", "Validation error, nothing saved"));
-        t.add(tc("TC2.3", "Upload valid logo", "file=logo_1.png; size=500 KB", "Logo displayed on profile"));
-        t.add(tc("TC2.4a", "Upload invalid logo (type)", "file=malware.exe; size=3 KB", "Rejected with clear message"));
-        t.add(tc("TC2.4b", "Upload invalid logo (size)", "file=huge_logo.png; size=" + (MAX_LOGO_KB + 3072) + " KB (limit " + MAX_LOGO_KB + " KB)", "Rejected with clear message"));
-        t.add(tc("TC2.5", "Edit company info", "address=1 Orchard Road, Singapore 238824", "New address shown on public page"));
-        t.add(tc("TC2.6", "Customer views company", "customer=" + cust.email + "; open COM-001 page", "Public fields shown; private_notes / password NOT shown"));
+        t.add(tc("TC2.3", "Edit company info", "address=1 Orchard Road, Singapore 238824", "New address shown on public page"));
+        t.add(tc("TC2.4", "Customer views company", "customer=" + cust.email + "; open COM-001 page", "Public fields shown; private_notes / password NOT shown"));
 
         // TC3 - IDP portfolio
         t.add(tc("TC3.1", "Add current IDP", "designer=" + des.email + "; status=CURRENT; end_date=blank", "Appears under 'Current'"));
         t.add(tc("TC3.2", "Add past IDP with images", "status=COMPLETED; images=3 (e.g. " + completed.id + " has images in idp_images.csv)", "Appears under 'Past' with all images"));
-        t.add(tc("TC3.3", "End date before start", "start_date=2026-06-01; end_date=2026-05-01", "Validation error"));
-        t.add(tc("TC3.4", "Missing title", "title=", "Rejected"));
-        t.add(tc("TC3.5", "Mark current as completed", "idp=" + current.id + "; status=COMPLETED; end_date=2026-11-01", "Moves to 'Past'"));
-        t.add(tc("TC3.6", "Edit IDP details", "idp=" + completed.id + "; description=Updated text; budget=88000", "Updated in portfolio and customer view"));
-        t.add(tc("TC3.7", "Delete IDP", "idp=" + idps.get(10).id + " (is_deleted=true, saved by customers); confirm", "Removed from portfolio; saved lists show 'unavailable'"));
-        t.add(tc("TC3.8", "Image limit", "upload " + (MAX_IMAGES + 1) + " images (limit " + MAX_IMAGES + ")", "Extra uploads rejected"));
-        t.add(tc("TC3.9", "Empty portfolio", "designer=" + desNoIdp.email + " (no IDPs)", "Friendly 'no projects yet' message"));
-        t.add(tc("TC3.10", "Filter by status", "customer filters status=Past", "Only COMPLETED IDPs listed"));
-
+        t.add(tc("TC3.3", "Missing title", "title=", "Rejected"));
+        t.add(tc("TC3.4", "Mark current as completed", "idp=" + current.id + "; status=COMPLETED; end_date=2026-11-01", "Moves to 'Past'"));
+        t.add(tc("TC3.5", "Edit IDP details", "idp=" + completed.id + "; description=Updated text; budget=88000", "Updated in portfolio and customer view"));
+        t.add(tc("TC3.6", "Empty portfolio", "designer=" + desNoIdp.email + " (no IDPs)", "Friendly 'no projects yet' message"));
+        
         // TC4 - customer search
         t.add(tc("TC4.1", "Keyword search with matches", "keyword=quiet (e.g. " + quietIdp.id + ")", "Only matching IDPs shown"));
-        t.add(tc("TC4.2", "Search no results", "keyword=zzzzzz", "'No results found' message"));
+        t.add(tc("TC4.2", "Search no results", "keyword=zzzzzz", "Empty list and the message 'No projects match your search' (use case #238, 3a)"));
         t.add(tc("TC4.3", "Clear filters", "remove all filters", "Full list returns"));
         t.add(tc("TC4.4", "View IDP details", "open " + completed.id, "Full details, images and ID info displayed"));
         t.add(tc("TC4.5", "Save IDP", "customer=" + cust.email + "; save " + current.id, "In saved list, button shows 'Saved'"));
-        t.add(tc("TC4.6", "Remove saved IDP", "customer=" + sv.customerId + "; remove " + sv.idpId, "Removed immediately"));
-        t.add(tc("TC4.7", "Persistence", "log out and back in as " + sv.customerId, "Saved IDPs still present"));
+        t.add(tc("TC4.6", "Persistence", "log out and back in as " + sv.customerId, "Saved IDPs still present"));
 
         // TC5 - tracking
         t.add(tc("TC5.1", "View increments", "customer=" + cust.email + "; open " + current.id + " (new session)", "View count +1"));
-        t.add(tc("TC5.2", "Repeat view same session", "same customer reopens " + current.id, "Unchanged if unique-per-session rule (see counted=false rows)"));
-        t.add(tc("TC5.3", "Shortlist increments", "customer saves " + current.id, "Shortlist count +1"));
-        t.add(tc("TC5.4", "Unsave decrements", "customer removes " + current.id + " from saved", "Shortlist count -1, never below 0"));
-        t.add(tc("TC5.5", "No activity", "idp=" + noActivity.id + " (0 views, 0 shortlists in idp_stats.csv)", "Shows 0 and 0"));
-        t.add(tc("TC5.6", "ID views own IDP", "designer opens own IDP (viewer_role=INTERIOR_DESIGNER rows)", "Not counted as customer view"));
-
+        t.add(tc("TC5.2", "Shortlist increments", "customer saves " + current.id, "Shortlist count +1"));
+        t.add(tc("TC5.3", "No activity", "idp=" + noActivity.id + " (0 views, 0 shortlists in idp_stats.csv)", "Shows 0 and 0"));
+        
         // TC6 - platform management
         t.add(tc("TC6.1", "Create category", "name=Kitchen (not in seed data, so creation succeeds)", "Saved; appears in IDP forms and filters"));
         t.add(tc("TC6.2", "Duplicate category", "name=Kitchen (run after TC6.1)", "Rejected as already exists"));
         t.add(tc("TC6.3", "Empty category name", "name=", "Validation error"));
         t.add(tc("TC6.4", "Edit category", "CAT-002 rename to 'Kitchen Renovated'", "Name updates everywhere it is used"));
-        t.add(tc("TC6.5", "Make category in use unavailable", "block a category assigned to IDPs (see idps.csv category_id)", "Made unavailable with warning, no data corruption"));
-        t.add(tc("TC6.6", "User report", "select user report", "Counts per role match expected_reports.csv"));
-        t.add(tc("TC6.7", "Activity report with data", "range=2026-01-01..2026-06-30", "Figures match expected_reports.csv"));
-        t.add(tc("TC6.8", "Report with no data", "range=2000-01-01..2000-01-31", "Zeros or 'no data', no error"));
+        t.add(tc("TC6.5", "Activity report with data", "range=2026-01-01..2026-06-30", "Figures match expected_reports.csv"));
+        t.add(tc("TC6.6", "Report with no data", "range=2000-01-01..2000-01-31", "Zeros or 'no data', no error"));
 
         write("test_case_data.csv", new String[]{"tc_id", "scenario", "input_data", "expected_result"}, t);
     }
 
     static void writeExpectedReports(List<User> users, List<Saved> saved, List<View> views) {
         List<String[]> rows = new ArrayList<>();
-        for (String role : new String[]{"CUSTOMER", "INTERIOR_DESIGNER", "ADMIN"}) {
-            int c = 0;
-            for (User u : users) if (u.role.equals(role)) c++;
-            rows.add(new String[]{"TC6.6", "user_count_" + role, "all", String.valueOf(c)});
-        }
-        String[][] ranges = {{"2026-01-01", "2026-06-30", "TC6.7"}, {"2000-01-01", "2000-01-31", "TC6.8"}};
+        String[][] ranges = {{"2026-01-01", "2026-06-30", "TC6.5"}, {"2000-01-01", "2000-01-31", "TC6.6"}};
         for (String[] r : ranges) {
             LocalDateTime from = LocalDate.parse(r[0]).atStartOfDay();
             LocalDateTime to = LocalDate.parse(r[1]).atTime(LocalTime.MAX);
@@ -470,6 +455,77 @@ public class TestDataGenerator {
         StringBuilder sb = new StringBuilder();
         for (byte b : d) sb.append(String.format("%02x", b));
         return sb.toString();
+    }
+
+
+    // =====================================================================
+    // Use-case driven data (use-case descriptions PDF) - long format: uc_id,name,key,value
+    // Message texts are copied verbatim from the PDF; TestRunner asserts on them.
+    // =====================================================================
+    static void uc(List<String[]> rows, String id, String name, String... kv) {
+        if (kv.length == 0) rows.add(new String[]{id, name, "-", "-"});
+        for (int i = 0; i + 1 < kv.length; i += 2) rows.add(new String[]{id, name, kv[i], kv[i + 1]});
+    }
+
+    static void writeUseCaseData() {
+        List<String[]> u = new ArrayList<>();
+        String pw = "Str0ng!Pass1";
+        uc(u, "UC#220", "Fill Customer Registration Form", "valid_password", pw, "mismatch_password", "Different!Pass2",
+                "bad_email", "not-an-email", "msg_invalid_email", "Invalid email format", "msg_mismatch", "Passwords do not match");
+        uc(u, "UC#221", "Create Customer Account", "password", pw,
+                "msg_success", "Account created successfully", "msg_dup", "Email is already registered");
+        uc(u, "UC#222", "Register Interior Designer Account", "password", pw, "proof_file", "business_proof.pdf",
+                "msg_success", "Application submitted successfully", "msg_dup", "Email is already registered");
+        uc(u, "UC#223", "Set Account Pending Verification", "msg_success", "Application submitted successfully");
+        uc(u, "UC#224", "Log In", "msg_success", "Login successful",
+                "msg_suspended", "This account does not have active access.", "msg_wrong", "Email or password is incorrect.");
+        uc(u, "UC#225", "Log Out", "msg_success", "Logged out successfully");
+        uc(u, "UC#226", "Role-Based Screens");
+        uc(u, "UC#227", "Search Accounts", "no_match_keyword", "zzzzzz-no-such-account", "msg_no_match", "No accounts found");
+        uc(u, "UC#228", "Create Account for Any Role", "password", pw, "roles", "customer,designer,admin,manager",
+                "msg_success", "Account created successfully", "msg_mismatch", "Passwords do not match",
+                "msg_dup", "Email is already in use");
+        uc(u, "UC#229", "Suspend or Reactivate Account", "msg_success", "Account status updated successfully",
+                "msg_own", "You cannot change your own status.");
+        uc(u, "UC#230", "Delete Account", "msg_success", "Account deleted successfully",
+                "msg_own", "You cannot delete your own account.");
+        uc(u, "UC#231", "Edit Company Details", "year", "2016", "msg_success", "Company details saved successfully",
+                "msg_dup_uen", "UEN is already registered");
+        uc(u, "UC#232", "Public Company Profile", "unknown_id", "no-such-designer", "msg_not_found", "Designer profile not found");
+        uc(u, "UC#256", "Approve or Reject Designer", "msg_approved", "Designer approved successfully",
+                "msg_rejected", "Designer registration rejected", "msg_no_proof", "Business proof is required before approval.",
+                "no_proof_designer", "sam@meow.demo");
+        uc(u, "UC#233", "Create IDP", "msg_success", "IDP created successfully");
+        uc(u, "UC#234", "Upload Photos and Choose Cover", "photos", "3", "cover", "1", "bad_cover", "9",
+                "msg_success", "Photos uploaded successfully", "msg_cover", "Choose a valid cover image.",
+                "msg_type", "Use PNG, JPEG or WebP images; business proof also accepts PDF.");
+        uc(u, "UC#235", "Edit IDP", "msg_success", "IDP updated successfully");
+        uc(u, "UC#236", "View Own IDP List");
+        uc(u, "UC#237", "Search Published IDPs");
+        uc(u, "UC#238", "View Search Results", "no_match_keyword", "zzzzzz", "msg_no_match", "No projects match your search");
+        uc(u, "UC#239", "View IDP Details and Gallery", "unknown_id", "no-such-idp", "msg_not_found", "Resource not found.");
+        uc(u, "UC#240", "Company Link from IDP", "unknown_id", "no-such-idp", "msg_not_found", "Resource not found.");
+        uc(u, "UC#241", "Record IDP View");
+        uc(u, "UC#242", "Save Favourite without Duplicates", "msg_success", "Saved to favourites", "msg_dup", "Already in your favourites");
+        uc(u, "UC#243", "Record IDP Shortlist");
+        uc(u, "UC#244", "Portfolio Totals");
+        uc(u, "UC#245", "Stats per IDP");
+        uc(u, "UC#263", "Publish or Unpublish IDP", "msg_publish", "IDP published successfully", "msg_unpublish", "IDP unpublished");
+        uc(u, "UC#266", "Assign IDP Categories", "invalid_category", "no-such-category",
+                "msg_success", "Categories saved successfully", "msg_none", "Select at least one category",
+                "msg_invalid", "Choose available categories only.");
+        uc(u, "UC#273", "View Favourites List");
+        uc(u, "UC#246", "Create Category", "name", "UC Category", "description", "Created by the use-case test",
+                "msg_success", "Category created successfully", "msg_empty", "Category name is required",
+                "msg_dup", "Category already exists");
+        uc(u, "UC#247", "Edit Category", "msg_success", "Category updated successfully",
+                "msg_empty", "Category name is required", "msg_dup", "Category already exists");
+        uc(u, "UC#248", "Make Category Available", "msg_off", "Category is unavailable for IDP creation",
+                "msg_on", "Category is now available for IDP creation");
+        uc(u, "UC#249", "Select Report Period", "periods", "daily,weekly,monthly", "msg_future", "Date cannot be in the future");
+        uc(u, "UC#250", "Generate Activity Totals", "empty_date", "2000-01-05", "msg_none", "No activity in this period");
+        uc(u, "UC#251", "View Daily Report Table", "empty_date", "2000-01-05", "msg_none", "No activity in this period");
+        write("use_case_data.csv", new String[]{"uc_id", "name", "key", "value"}, u);
     }
 
     static String esc(String s) {

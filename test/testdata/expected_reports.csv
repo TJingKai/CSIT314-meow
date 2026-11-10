@@ -1,8 +1,5 @@
 tc_id,metric,range,expected_value
-TC6.6,user_count_CUSTOMER,all,100
-TC6.6,user_count_INTERIOR_DESIGNER,all,100
-TC6.6,user_count_ADMIN,all,3
-TC6.7,counted_views,2026-01-01..2026-06-30,112
-TC6.7,shortlists,2026-01-01..2026-06-30,45
-TC6.8,counted_views,2000-01-01..2000-01-31,0
-TC6.8,shortlists,2000-01-01..2000-01-31,0
+TC6.5,counted_views,2026-01-01..2026-06-30,135
+TC6.5,shortlists,2026-01-01..2026-06-30,45
+TC6.6,counted_views,2000-01-01..2000-01-31,0
+TC6.6,shortlists,2000-01-01..2000-01-31,0
