@@ -24,11 +24,11 @@ public class ViewReportTableController {
 
   public List<Map<String, Object>> getReportRows(String periodType, Date date) {
     context.call("ViewReportTableController.getReportRows");
-    if (!period.setPeriod(periodType, date)) throw new ApiException("Date cannot be in the future");
-    Date[] range = period.calculateRange();
-    List<Map<String, Object>> rows = report.getDailyRows(range[0], range[1]);
+    if (!period.setPeriod(periodType, date)) throw new ApiException("Date cannot be in the future");  // step 3
+    Date[] range = period.calculateRange();  // step 4
+    List<Map<String, Object>> rows = report.getDailyRows(range[0], range[1]);  // step 5
     if (rows.isEmpty()) return rows;
-    return calculateTotalRow(rows);
+    return calculateTotalRow(rows);  // step 6a
   }
 
   public List<Map<String, Object>> calculateTotalRow(List<Map<String, Object>> rows) {

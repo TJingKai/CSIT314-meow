@@ -23,22 +23,22 @@ public class ManageAccountPage {
   }
 
   public void viewAccountDetails(String userId) {
-    context.call("ManageAccountPage.viewAccountDetails");
+    context.call("ManageAccountPage.viewAccountDetails");  // #229 step 1, #230 step 1
     context.state().selectedId = userId;
   }
 
   public void clickUpdateStatus(String userId, String targetStatus) {
-    context.call("ManageAccountPage.clickUpdateStatus");
-    if (status.updateStatus(userId, targetStatus)) {
-      displaySuccessMsg("Account status updated successfully");
-      refreshView();
+    context.call("ManageAccountPage.clickUpdateStatus");  // step 2
+    if (status.updateStatus(userId, targetStatus)) {  // step 3
+      displaySuccessMsg("Account status updated successfully");  // step 5a
+      refreshView();  // step 6a
     } else displayError("Failed to update account status");
   }
 
   public void clickDelete(String userId) {
-    context.call("ManageAccountPage.clickDelete");
+    context.call("ManageAccountPage.clickDelete");  // step 2
     context.state().selectedId = userId;
-    showConfirmationPrompt();
+    showConfirmationPrompt();  // step 3
   }
 
   public void showConfirmationPrompt() {
@@ -47,16 +47,16 @@ public class ManageAccountPage {
   }
 
   public void cancel() {
-    context.call("ManageAccountPage.cancel");
+    context.call("ManageAccountPage.cancel");  // step 4a
     context.state().output.put("cancelled", true);
-    refreshView();
+    refreshView();  // step 5a
   }
 
   public void confirmDelete() {
-    context.call("ManageAccountPage.confirmDelete");
-    if (delete.deleteUser(context.state().selectedId)) {
-      displaySuccessMsg("Account deleted successfully");
-      refreshView();
+    context.call("ManageAccountPage.confirmDelete");  // step 4b, 4c
+    if (delete.deleteUser(context.state().selectedId)) {  // step 5b, 5c
+      displaySuccessMsg("Account deleted successfully");  // step 7c
+      refreshView();  // step 8c
     } else displayError("Failed to delete account");
   }
 

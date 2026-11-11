@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
-/** Maps expected failures to a stable API error contract without exposing stack traces. */
 @RestControllerAdvice
 public class ErrorHandler {
   private static final Logger LOG = LoggerFactory.getLogger(ErrorHandler.class);

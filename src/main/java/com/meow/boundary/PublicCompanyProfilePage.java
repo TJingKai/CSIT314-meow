@@ -20,12 +20,12 @@ public class PublicCompanyProfilePage {
 
   public void viewPublicProfile(String designerId) {
     context.call("PublicCompanyProfilePage.viewPublicProfile");
-    var details = view.getPublicProfile(designerId);
+    var details = view.getPublicProfile(designerId);  // step 2
     if (details == null) {
-      displayError("Designer profile not found");
-      redirectToHome();
+      displayError("Designer profile not found");  // step 4b
+      redirectToHome();  // step 5b
       context.state().status = 404;
-    } else renderProfile(details);
+    } else renderProfile(details);  // step 4a
   }
 
   public void renderProfile(Map<String, Object> details) {

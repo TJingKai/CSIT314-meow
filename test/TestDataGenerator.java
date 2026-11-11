@@ -32,7 +32,7 @@ import java.util.Set;
  */
 public class TestDataGenerator {
 
-    // ---------- configuration ----------
+    // configuration
     static final int N = 100;               // records per core data type
     static final int VIEW_EVENTS = 300;     // customer view events
     static final int OWNER_VIEWS = 10;      // designers viewing their own IDP (TC5.6)
@@ -45,7 +45,7 @@ public class TestDataGenerator {
 
     static Random R;
 
-    // ---------- simple data holders ----------
+    // simple data holders
     static class User {
         String id, role, name, email, plainPw, status;
         LocalDateTime created;
@@ -69,7 +69,7 @@ public class TestDataGenerator {
         boolean counted;
     }
 
-    // ---------- vocab ----------
+    // vocab
     static final String[] FIRST = {"Aiden", "Mei", "Raj", "Sofia", "Daniel", "Priya", "Wei", "Hannah", "Omar", "Chloe",
             "Farah", "Lucas", "Nadia", "Ethan", "Yuki", "Isabel", "Kenji", "Amara", "Jonas", "Lina"};
     static final String[] LAST = {"Tan", "Lim", "Nair", "Garcia", "Wong", "Patel", "Chen", "Ahmad", "Lee", "Kumar",
@@ -88,13 +88,12 @@ public class TestDataGenerator {
             "Statement feature wall paired with simple furniture.",
             "Sustainable materials sourced from local suppliers."};
 
-    // =====================================================================
     public static void main(String[] args) throws Exception {
         long seed = args.length > 0 ? Long.parseLong(args[0]) : 20261108L;
         R = new Random(seed);
         Files.createDirectories(Paths.get(OUT));
 
-        // ---- users ----
+        // users
         List<User> customers = makeUsers("CUS", "CUSTOMER", N);
         List<User> designers = makeUsers("IDS", "INTERIOR_DESIGNER", N);
         List<User> admins = makeUsers("ADM", "ADMIN", 3);
@@ -104,26 +103,26 @@ public class TestDataGenerator {
         allUsers.addAll(admins);
         writeUsers(allUsers);
 
-        // ---- company profiles (one per designer) ----
+        // company profiles (one per designer)
         writeCompanies(designers);
 
-        // ---- categories ----
+        // categories
         List<String[]> categories = makeCategories();
         write("categories.csv", new String[]{"category_id", "name", "is_available"}, categories);
 
-        // ---- IDPs + images ----
+        // IDPs + images
         List<Idp> idps = makeIdps(designers, categories);
         writeIdps(idps);
         writeImages(idps);
 
-        // ---- saved list, views, stats ----
+        // saved list, views, stats
         List<Saved> saved = makeSaved(customers, idps);
         writeSaved(saved);
         List<View> views = makeViews(customers, idps);
         writeViews(views);
         writeStats(idps, saved, views);
 
-        // ---- test-case driven data + expected reports ----
+        // test-case driven data + expected reports
         writeTestCaseData(customers, designers, idps, saved, categories);
         writeExpectedReports(allUsers, saved, views);
         writeUseCaseData();
@@ -134,9 +133,7 @@ public class TestDataGenerator {
                 + ", saved=" + saved.size() + ", views=" + views.size());
     }
 
-    // =====================================================================
     // Generators
-    // =====================================================================
     static List<User> makeUsers(String prefix, String role, int count) {
         List<User> list = new ArrayList<>();
         for (int i = 1; i <= count; i++) {
@@ -256,9 +253,7 @@ public class TestDataGenerator {
         return list;
     }
 
-    // =====================================================================
     // Writers
-    // =====================================================================
     static void writeUsers(List<User> users) throws Exception {
         List<String[]> rows = new ArrayList<>();
         for (User u : users) {
@@ -348,9 +343,7 @@ public class TestDataGenerator {
         write("idp_stats.csv", new String[]{"idp_id", "view_count", "shortlist_count"}, rows);
     }
 
-    // ---------------------------------------------------------------------
     // Concrete input data for every test case in the six tables
-    // ---------------------------------------------------------------------
     static void writeTestCaseData(List<User> customers, List<User> designers, List<Idp> idps,
                                   List<Saved> saved, List<String[]> categories) {
         List<String[]> t = new ArrayList<>();
@@ -425,9 +418,7 @@ public class TestDataGenerator {
         write("expected_reports.csv", new String[]{"tc_id", "metric", "range", "expected_value"}, rows);
     }
 
-    // =====================================================================
     // Helpers
-    // =====================================================================
     static String[] tc(String id, String scenario, String input, String expected) {
         return new String[]{id, scenario, input, expected};
     }
@@ -457,11 +448,8 @@ public class TestDataGenerator {
         return sb.toString();
     }
 
-
-    // =====================================================================
     // Use-case driven data (use-case descriptions PDF) - long format: uc_id,name,key,value
     // Message texts are copied verbatim from the PDF; TestRunner asserts on them.
-    // =====================================================================
     static void uc(List<String[]> rows, String id, String name, String... kv) {
         if (kv.length == 0) rows.add(new String[]{id, name, "-", "-"});
         for (int i = 0; i + 1 < kv.length; i += 2) rows.add(new String[]{id, name, kv[i], kv[i + 1]});

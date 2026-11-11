@@ -23,8 +23,8 @@ public class CompanyProfilePage {
   }
 
   public void viewCompanyProfile(String designerId) {
-    context.call("CompanyProfilePage.viewCompanyProfile");
-    displayForm(context.state().output);
+    context.call("CompanyProfilePage.viewCompanyProfile");  // step 1
+    displayForm(context.state().output);  // step 2
   }
 
   public void displayForm(Map<String, Object> details) {
@@ -33,12 +33,12 @@ public class CompanyProfilePage {
   }
 
   public void submitDetails(String designerId, String name, String desc, String uen, int year) {
-    context.call("CompanyProfilePage.submitDetails");
-    if (profile.saveProfile(designerId, name, desc, uen, year)) {
-      displaySuccessMsg("Company details saved successfully");
-      refreshPage();
+    context.call("CompanyProfilePage.submitDetails");  // step 3
+    if (profile.saveProfile(designerId, name, desc, uen, year)) {  // step 4
+      displaySuccessMsg("Company details saved successfully");  // step 7a
+      refreshPage();  // step 8a
     } else {
-      displayError("UEN is already registered");
+      displayError("UEN is already registered");  // step 6b
       context.state().status = 409;
     }
   }
@@ -49,9 +49,9 @@ public class CompanyProfilePage {
   }
 
   public void clickCompanyName(String idpId) {
-    context.call("CompanyProfilePage.clickCompanyName");
-    var company = view.getCompanyProfile(idpId);
-    displayCompanyProfile(company);
+    context.call("CompanyProfilePage.clickCompanyName");  // step 1
+    var company = view.getCompanyProfile(idpId);  // step 2
+    displayCompanyProfile(company);  // step 4a
   }
 
   public void displayCompanyProfile(com.meow.domain.Company company) {

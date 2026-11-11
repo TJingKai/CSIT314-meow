@@ -23,8 +23,8 @@ public class UploadPhotosController {
 
   public boolean uploadPhotos(String idpId, File[] photos, int coverIndex) {
     context.call("UploadPhotosController.uploadPhotos");
-    boolean saved = photo.savePhotos(idpId, photos);
+    boolean saved = photo.savePhotos(idpId, photos);  // step 3
     if (!saved) return false;
-    return idp.setCoverImage(idpId, coverIndex);
+    return idp.setCoverImage(idpId, coverIndex);  // step 4a, 4b
   }
 }

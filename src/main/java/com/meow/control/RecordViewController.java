@@ -22,8 +22,8 @@ public class RecordViewController {
 
   public int recordView(String idpId) {
     context.call("RecordViewController.recordView");
-    if (!idp.isPublished(idpId)) return 0;
-    if (!views.saveView(idpId)) return -1;
-    return views.getViewCount(idpId);
+    if (!idp.isPublished(idpId)) return 0;  // step 3
+    if (!views.saveView(idpId)) return -1;  // step 4a
+    return views.getViewCount(idpId);  // step 5a
   }
 }

@@ -19,9 +19,9 @@ public class IDPPhotoPage {
   }
 
   public void submitPhotos(File[] photos, int coverIndex) {
-    context.call("IDPPhotoPage.submitPhotos");
-    if (upload.uploadPhotos(context.state().selectedId, photos, coverIndex))
-      displayMessage("Photos uploaded successfully");
+    context.call("IDPPhotoPage.submitPhotos");  // step 1
+    if (upload.uploadPhotos(context.state().selectedId, photos, coverIndex))  // step 2
+      displayMessage("Photos uploaded successfully");  // step 5a
     else throw new ApiException("Photos could not be saved.");
   }
 

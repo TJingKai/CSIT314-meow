@@ -21,6 +21,6 @@ public class AssignCategoriesController {
   public int assignCategories(String idpId, List<String> categoryIds) {
     context.call("AssignCategoriesController.assignCategories");
     if (categoryIds.isEmpty()) return 0;
-    return categories.saveCategories(idpId, categoryIds) ? 1 : -1;
+    return categories.saveCategories(idpId, categoryIds) ? 1 : -1;  // step 3a, 3c
   }
 }

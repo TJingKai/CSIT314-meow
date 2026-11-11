@@ -24,11 +24,11 @@ public class ViewCompanyProfileController {
 
   public Map<String, Object> getPublicProfile(String designerId) {
     context.call("ViewCompanyProfileController.getPublicProfile");
-    return profile.getDetails(designerId);
+    return profile.getDetails(designerId);  // step 3
   }
 
   public com.meow.domain.Company getCompanyProfile(String idpId) {
     context.call("ViewCompanyProfileController.getCompanyProfile");
-    return company.getCompanyByIDP(idpId);
+    return company.getCompanyByIDP(idpId);  // step 3
   }
 }

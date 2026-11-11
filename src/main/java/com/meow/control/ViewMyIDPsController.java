@@ -19,6 +19,6 @@ public class ViewMyIDPsController {
 
   public List<Map<String, Object>> getMyIDPs(String designerId) {
     context.call("ViewMyIDPsController.getMyIDPs");
-    return idp.getIDPsByDesigner(designerId);
+    return idp.getIDPsByDesigner(designerId);  // step 3
   }
 }

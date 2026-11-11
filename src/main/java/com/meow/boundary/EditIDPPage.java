@@ -19,9 +19,9 @@ public class EditIDPPage {
 
   public void saveChanges(
       String idpId, String title, String description, String projectDetails, String status) {
-    context.call("EditIDPPage.saveChanges");
-    if (edit.editIDP(idpId, title, description, projectDetails, status))
-      displayMessage("IDP updated successfully");
+    context.call("EditIDPPage.saveChanges");  // step 1
+    if (edit.editIDP(idpId, title, description, projectDetails, status))  // step 2
+      displayMessage("IDP updated successfully");  // step 4
     else throw new ApiException("IDP could not be updated.");
   }
 

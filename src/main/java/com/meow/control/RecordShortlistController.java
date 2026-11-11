@@ -24,8 +24,8 @@ public class RecordShortlistController {
   public int recordShortlist(String idpId, String userId) {
     context.call("RecordShortlistController.recordShortlist");
     db.required("SELECT id FROM projects WHERE id=? FOR UPDATE", idpId);
-    if (shortlists.isShortlisted(idpId, userId)) return 0;
-    if (!shortlists.saveShortlist(idpId, userId)) return -1;
-    return shortlists.getShortlistCount(idpId);
+    if (shortlists.isShortlisted(idpId, userId)) return 0;  // step 3
+    if (!shortlists.saveShortlist(idpId, userId)) return -1;  // step 4a
+    return shortlists.getShortlistCount(idpId);  // step 5a
   }
 }

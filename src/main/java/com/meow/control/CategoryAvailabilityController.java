@@ -20,11 +20,11 @@ public class CategoryAvailabilityController {
 
   public List<Map<String, Object>> getCategories() {
     context.call("CategoryAvailabilityController.getCategories");
-    return category.getAllCategories();
+    return category.getAllCategories();  // #248 step 3, #276 step 3
   }
 
   public boolean setAvailable(String categoryId, boolean available) {
     context.call("CategoryAvailabilityController.setAvailable");
-    return category.updateAvailability(categoryId, available);
+    return category.updateAvailability(categoryId, available);  // #248 step 7, #276 step 7
   }
 }

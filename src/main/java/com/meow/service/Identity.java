@@ -6,7 +6,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
 
-/** Request-scoped authenticated identity populated by the API security interceptor. */
 @Component
 @RequestScope
 public class Identity {

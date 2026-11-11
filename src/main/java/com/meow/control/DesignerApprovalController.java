@@ -20,13 +20,13 @@ public class DesignerApprovalController {
 
   public boolean approveDesigner(String designerId) {
     context.call("DesignerApprovalController.approveDesigner");
-    if (!designer.setStatus(designerId, "ACTIVE")) return false;
-    designer.enablePublish(designerId);
+    if (!designer.setStatus(designerId, "ACTIVE")) return false;  // step 5a, 5c
+    designer.enablePublish(designerId);  // step 6a
     return true;
   }
 
   public boolean rejectDesigner(String designerId) {
     context.call("DesignerApprovalController.rejectDesigner");
-    return designer.setStatus(designerId, "REJECTED");
+    return designer.setStatus(designerId, "REJECTED");  // step 5b
   }
 }

@@ -1,6 +1,5 @@
 package com.meow.api;
 
-/** An expected validation, permission or resource error safe to show to the client. */
 public class ApiException extends RuntimeException {
   private final int status;
   private final String code;

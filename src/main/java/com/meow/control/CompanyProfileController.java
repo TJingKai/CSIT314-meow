@@ -19,7 +19,7 @@ public class CompanyProfileController {
 
   public boolean saveProfile(String designerId, String name, String desc, String uen, int year) {
     context.call("CompanyProfileController.saveProfile");
-    if (company.isUenExists(uen)) return false;
-    return company.updateDetails(designerId, name, desc, uen, year);
+    if (company.isUenExists(uen)) return false;  // step 5
+    return company.updateDetails(designerId, name, desc, uen, year);  // step 6a
   }
 }

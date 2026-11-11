@@ -19,7 +19,7 @@ public class CreateCategoryController {
 
   public boolean createCategory(String name, String description) {
     context.call("CreateCategoryController.createCategory");
-    if (category.nameExists(name)) return false;
-    return category.saveCategory(name, description);
+    if (category.nameExists(name)) return false;  // step 5a, 5c
+    return category.saveCategory(name, description);  // step 6a
   }
 }

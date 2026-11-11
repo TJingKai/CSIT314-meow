@@ -1,4 +1,3 @@
-/** Presentation helpers. All user-supplied strings are escaped before HTML insertion. */
 export const $ = (selector) => document.querySelector(selector);
 export const roles = {
   customer: "Customer",
@@ -115,7 +114,7 @@ export function header(user, allowedScreens = []) {
           .map((name) => name[0])
           .join(""),
        )}</span>
-      <button class="btn text" data-action="logout">Log out ↪</button>`
+      <button class="btn text" data-action="logout">Log out </button>`
         : '<a class="btn" href="#login">Log in</a><a class="btn primary" href="#register">Join MEOW</a>'
     }</div></header>`;
 }

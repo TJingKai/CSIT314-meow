@@ -19,7 +19,7 @@ public class FormValidator {
 
   public boolean validate(String email, String pwd, String confirmPwd) {
     context.call("FormValidator.validate");
-    form.setDetails(email, pwd, confirmPwd);
-    return form.isValid();
+    form.setDetails(email, pwd, confirmPwd);  // step 5
+    return form.isValid();  // step 6
   }
 }

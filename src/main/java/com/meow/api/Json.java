@@ -3,7 +3,6 @@ package com.meow.api;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/** Consistent, ordered JSON envelopes; map values may deliberately be null. */
 public final class Json {
   private Json() {}
 

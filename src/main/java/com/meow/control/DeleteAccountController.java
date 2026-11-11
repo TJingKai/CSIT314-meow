@@ -19,6 +19,6 @@ public class DeleteAccountController {
 
   public boolean deleteUser(String userId) {
     context.call("DeleteAccountController.deleteUser");
-    return user.removeAccount(userId);
+    return user.removeAccount(userId);  // step 6b, 6c
   }
 }

@@ -19,7 +19,7 @@ public class LoginPage {
 
   public void navigateToLoginPage() {
     context.call("LoginPage.navigateToLoginPage");
-    displayLoginForm();
+    displayLoginForm();  // step 2
   }
 
   public void displayLoginForm() {
@@ -35,8 +35,8 @@ public class LoginPage {
 
   public void clickLogin() {
     context.call("LoginPage.clickLogin");
-    if (login.login(context.value("email"), context.value("password")))
-      displayMsg("Login successful");
+    if (login.login(context.value("email"), context.value("password")))  // step 5
+      displayMsg("Login successful");  // step 7b
   }
 
   public void displayMsg(String message) {

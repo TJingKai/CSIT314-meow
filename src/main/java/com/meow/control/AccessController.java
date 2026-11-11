@@ -19,7 +19,7 @@ public class AccessController {
 
   public List<String> getAuthorizedScreens(String roleName) {
     context.call("AccessController.getAuthorizedScreens");
-    List<String> permissions = role.getPermissions(roleName);
+    List<String> permissions = role.getPermissions(roleName);  // step 3
     return permissions.isEmpty() ? null : permissions;
   }
 }

@@ -19,11 +19,11 @@ public class AppMenuView {
 
   public void openNavigationMenu(String role) {
     context.call("AppMenuView.openNavigationMenu");
-    var screens = access.getAuthorizedScreens(role);
+    var screens = access.getAuthorizedScreens(role);  // step 2
     if (screens == null) {
       displayError("Access Denied: Unauthorized role");
       redirectToHome();
-    } else renderMenu(screens);
+    } else renderMenu(screens);  // step 4
   }
 
   public void renderMenu(List<String> screens) {

@@ -2,7 +2,6 @@ package com.meow.workflow;
 
 import java.util.*;
 
-/** Pure arithmetic shared by the two placements of calculateTotalRow in the report. */
 public final class ReportMath {
   private ReportMath() {}
 

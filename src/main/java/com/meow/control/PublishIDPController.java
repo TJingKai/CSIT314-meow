@@ -19,6 +19,6 @@ public class PublishIDPController {
 
   public boolean setPublishStatus(String idpId, String action) {
     context.call("PublishIDPController.setPublishStatus");
-    return idp.updateStatus(idpId, action);
+    return idp.updateStatus(idpId, action);  // step 3
   }
 }

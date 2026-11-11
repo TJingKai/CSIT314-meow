@@ -20,8 +20,8 @@ public class VerificationController {
 
   public boolean processPending(String designerId) {
     context.call("VerificationController.processPending");
-    if (!designer.setStatus(designerId, "PENDING_VERIFICATION")) return false;
-    designer.disablePublish(designerId);
+    if (!designer.setStatus(designerId, "PENDING_VERIFICATION")) return false;  // step 3
+    designer.disablePublish(designerId);  // step 4
     return true;
   }
 }

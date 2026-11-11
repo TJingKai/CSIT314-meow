@@ -19,13 +19,13 @@ public class IDPCategoryPage {
   }
 
   public void saveCategories(String idpId, List<String> categoryIds) {
-    context.call("IDPCategoryPage.saveCategories");
-    int result = assign.assignCategories(idpId, categoryIds);
+    context.call("IDPCategoryPage.saveCategories");  // step 1
+    int result = assign.assignCategories(idpId, categoryIds);  // step 2
     context.state().output.put("result", result);
     if (result == 0) {
-      displayMessage("Select at least one category");
+      displayMessage("Select at least one category");  // step 3b
       context.state().status = 400;
-    } else if (result == 1) displayMessage("Categories saved successfully");
+    } else if (result == 1) displayMessage("Categories saved successfully");  // step 4a
     else throw new ApiException("Categories could not be saved.");
   }
 

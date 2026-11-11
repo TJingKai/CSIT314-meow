@@ -23,7 +23,6 @@ import org.springframework.test.context.*;
 import org.springframework.test.web.servlet.*;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
-/** Expected method lists were independently transcribed from all 36 supplied sequence diagrams. */
 @SpringBootTest(
     properties = {
       "spring.datasource.url=jdbc:h2:mem:sprinttest;DB_CLOSE_DELAY=-1;DATABASE_TO_LOWER=TRUE",

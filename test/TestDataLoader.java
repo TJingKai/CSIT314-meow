@@ -17,29 +17,14 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * Loads the CSV files produced by TestDataGenerator into the running MEOW Spring Boot app
- * (and therefore into its H2 database) through the app's own REST API (/api/v1).
+ * Loads ./testdata (from TestDataGenerator) into a running MEOW app through its REST API, so
+ * passwords are hashed and the app's own validation rules apply.
  *
- * Why the API and not JDBC: the app hashes passwords, assigns its own ids and enforces its own
- * rules, so going through the API keeps the data valid without needing the table layout.
+ * Usage: java TestDataLoader.java [base url]   (default http://127.0.0.1:8000)
+ * The app must be running on a fresh database with --meow.seed-demo=true.
  *
- * Order: categories -> customers/admins/designers (+ company profile) -> IDPs (+ photos,
- * category, publish) -> unavailable categories -> favourites + shortlists -> IDP views.
- *
- * Prerequisites:
- *   1. java TestDataGenerator                        (creates ./testdata)
- *   2. app running on a FRESH database, started with --meow.seed-demo=true
- *
- * Run:  java TestDataLoader.java                       (Java 17+, no compile step)
- *       java TestDataLoader.java http://127.0.0.1:8000 (optional base URL)
- *
- * Run it BEFORE TestRunner.java. Run it once per database: IDPs that already exist (same title)
- * are reused, but if nothing new was created the favourites/shortlists/views phase is skipped so
- * the counts are not doubled.
- *
- * Limits of the API route: created_at / saved_at / viewed_at in the CSVs cannot be back-dated, so
- * everything is stamped "now"; budget and start/end dates are stored as text in projectDetails;
- * IDPs flagged is_deleted are not loaded; views by designers on their own IDP are not loaded.
+ * Timestamps in the CSVs are not back-dated (everything is stamped now), budget and dates go into
+ * projectDetails, IDPs marked is_deleted are skipped and owner views are not loaded.
  */
 public class TestDataLoader {
 
@@ -54,7 +39,7 @@ public class TestDataLoader {
     static int errors = 0;
     static final List<String> errorLog = new ArrayList<>();
 
-    // ------------------------------------------------------------------ http helpers
+    // http helpers
     static class Sess { String cookie, csrf; }
 
     static class Resp {
@@ -146,7 +131,7 @@ public class TestDataLoader {
         if (errorLog.size() < 15) errorLog.add(line);
     }
 
-    // ------------------------------------------------------------------ api actions
+    // api actions
     /** Returns a session, or null when the credentials are not accepted. */
     static Sess tryLogin(String email, String pw) throws Exception {
         Resp r = json("POST", "/auth/session", null, "{\"email\":" + q(email) + ",\"password\":" + q(pw) + "}");
@@ -191,7 +176,7 @@ public class TestDataLoader {
         return false;
     }
 
-    // ------------------------------------------------------------------ csv
+    // csv
     static List<List<String>> readCsv(String file) throws Exception {
         Path p = Paths.get(DATA, file);
         if (!Files.exists(p)) throw new IllegalStateException("Missing " + p + " - run: java TestDataGenerator");
@@ -219,7 +204,7 @@ public class TestDataLoader {
         return rows.subList(1, rows.size());   // drop header
     }
 
-    // ------------------------------------------------------------------ main
+    // main
     public static void main(String[] args) throws Exception {
         if (args.length > 0) BASE = args[0].replaceAll("/+$", "");
         String envUrl = System.getenv("MEOW_URL");
@@ -244,7 +229,14 @@ public class TestDataLoader {
             System.err.println("Start it first:  java -jar meow.jar --meow.seed-demo=true");
             System.exit(2);
         }
-        Sess admin = tryLogin("admin@meow.demo", DEMO_PASSWORD), mgr = tryLogin("manager@meow.demo", DEMO_PASSWORD);
+        // the health check answers before the demo accounts are seeded, so give seeding a moment
+        // (at most 8 tries: the app locks an account after 10 failed logins)
+        Sess admin = null, mgr = null;
+        for (int i = 0; i < 8 && (admin == null || mgr == null); i++) {
+            if (i > 0) Thread.sleep(3000);
+            if (admin == null) admin = tryLogin("admin@meow.demo", DEMO_PASSWORD);
+            if (mgr == null) mgr = tryLogin("manager@meow.demo", DEMO_PASSWORD);
+        }
         if (admin == null || mgr == null) {
             System.err.println("Cannot log in as the demo admin/manager. Start the app with --meow.seed-demo=true on a FRESH database.");
             System.exit(2);
@@ -252,7 +244,7 @@ public class TestDataLoader {
         }
         System.out.println("Loading ./" + DATA + " into " + BASE);
 
-        // ---------------------------------------------------------- 1. categories (manager)
+        // 1. categories (manager)
         Map<String, String> catByName = new HashMap<>();
         Resp existing = get("/categories?flow=edit", mgr);
         if (existing.at("data", "categories") instanceof List)
@@ -273,7 +265,7 @@ public class TestDataLoader {
         }
         System.out.println("categories : " + catApp.size() + " usable (" + catNew + " created)");
 
-        // ---------------------------------------------------------- 2. users
+        // 2. users
         Map<String, String[]> userById = new HashMap<>();   // csv id -> {email, pw, name}
         Map<String, String> companyName = new HashMap<>(), companyDesc = new HashMap<>();
         for (List<String> c : companies) { companyName.put(c.get(1), c.get(2)); companyDesc.put(c.get(1), c.get(7)); }
@@ -305,7 +297,7 @@ public class TestDataLoader {
         }
         System.out.println("users      : " + cust + " customers, " + des + " designers (with company profile), " + adm + " admins");
 
-        // ---------------------------------------------------------- 3. IDPs
+        // 3. IDPs
         Map<String, Integer> photoCount = new HashMap<>();
         for (List<String> im : images) photoCount.merge(im.get(1), 1, Integer::sum);
         Map<String, Map<String, String>> ownTitles = new HashMap<>();   // designer csv id -> title -> app id
@@ -353,7 +345,7 @@ public class TestDataLoader {
         System.out.println("IDPs       : " + created + " created and published, " + reused + " already there, "
                 + skippedDeleted + " flagged is_deleted skipped");
 
-        // ---------------------------------------------------------- 4. unavailable categories
+        // 4. unavailable categories
         // done after the IDPs, because the app only accepts available categories on an IDP
         int off = 0;
         for (List<String> c : categories) {
@@ -363,7 +355,7 @@ public class TestDataLoader {
         }
         System.out.println("categories : " + off + " set to unavailable");
 
-        // ---------------------------------------------------------- 5. favourites, shortlists, views
+        // 5. favourites, shortlists, views
         if (created == 0) {
             System.out.println("favourites : skipped (no new IDPs were created, so this looks like a re-run)");
             System.out.println("views      : skipped (same reason)");
@@ -409,7 +401,7 @@ public class TestDataLoader {
         return false;
     }
 
-    // ================================================================== minimal JSON reader (no libraries needed)
+    // minimal JSON reader (no libraries needed)
     static final class Json {
         private final String s;
         private int i;

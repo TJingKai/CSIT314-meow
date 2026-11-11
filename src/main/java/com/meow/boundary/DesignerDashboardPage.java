@@ -23,21 +23,21 @@ public class DesignerDashboardPage {
   }
 
   public void navigateToDashboard() {
-    context.call("DesignerDashboardPage.navigateToDashboard");
-    int[] stats = totals.getTotalStats(context.value("designerId"));
+    context.call("DesignerDashboardPage.navigateToDashboard");  // step 1
+    int[] stats = totals.getTotalStats(context.value("designerId"));  // step 2
     if (stats == null) {
       displayMessage("You have not created any IDPs yet");
-      displayTotalStats(0, 0);
-    } else displayTotalStats(stats[0], stats[1]);
+      displayTotalStats(0, 0);  // step 6
+    } else displayTotalStats(stats[0], stats[1]);  // step 6
   }
 
   public void clickViewByIDP() {
-    context.call("DesignerDashboardPage.clickViewByIDP");
-    var stats = perIdp.getStatsPerIDP(context.value("designerId"));
+    context.call("DesignerDashboardPage.clickViewByIDP");  // step 1
+    var stats = perIdp.getStatsPerIDP(context.value("designerId"));  // step 2
     if (stats.isEmpty()) {
       context.state().output.put("projects", stats);
       displayMessage("No IDPs found");
-    } else displayIDPStatsList(stats);
+    } else displayIDPStatsList(stats);  // step 4
   }
 
   public void displayTotalStats(int views, int shortlists) {

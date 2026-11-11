@@ -36,7 +36,7 @@ import java.util.concurrent.Callable;
  */
 public class TestRunner {
 
-    // ------------------------------------------------------------------ config
+    // config
     static String BASE = "http://127.0.0.1:8000";
     static final String DATA = "testdata";
     static final String DEMO_PASSWORD = "MEOWDemo!2026";
@@ -48,7 +48,7 @@ public class TestRunner {
 
     static final HttpClient HTTP = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(10)).build();
 
-    // ------------------------------------------------------------------ result model
+    // result model
     static class NA extends RuntimeException {
         NA(String why) { super(why); }
     }
@@ -96,7 +96,7 @@ public class TestRunner {
         return sb.toString();
     }
 
-    // ------------------------------------------------------------------ generated test data
+    // generated test data
     static final Map<String, Map<String, String>> TC_INPUT = new HashMap<>();
     static final Map<String, String> TC_SCENARIO = new HashMap<>();
     static final Map<String, String[]> USER_BY_EMAIL = new HashMap<>();   // email -> {id, role, name, plainPw}
@@ -167,7 +167,7 @@ public class TestRunner {
         return u[3];
     }
 
-    // ------------------------------------------------------------------ HTTP helpers
+    // HTTP helpers
     static class Sess {
         String cookie, csrf, email;
     }
@@ -258,11 +258,11 @@ public class TestRunner {
         }
     }
 
-    // ------------------------------------------------------------------ bookkeeping for the activity report
+    // bookkeeping for the activity report
     static int expUsers = 0, expPublished = 0, expViews = 0, expShortlists = 0;
     static final Set<String> publishedOnce = new HashSet<>();
 
-    // ------------------------------------------------------------------ API actions
+    // API actions
     static Sess login(String email, String pw) throws Exception {
         Resp r = json("POST", "/auth/session", null, "{\"email\":" + q(email) + ",\"password\":" + q(pw) + "}");
         if (r.status != 200) throw new IllegalStateException("login failed for " + email + ": " + r.brief());
@@ -383,7 +383,7 @@ public class TestRunner {
         return sb.toString();
     }
 
-    // ------------------------------------------------------------------ helpers for the use-case suite
+    // helpers for the use-case suite
     static final String RUN = Long.toString(System.currentTimeMillis() % 1000000);
     static final String STRONG = "Str0ng!Pass1";
     static Sess S_ADMIN, S_MGR, S_CUST, S_DES, S_DESEMPTY;
@@ -463,7 +463,7 @@ public class TestRunner {
         System.out.println("------------------------------------------------------------------");
     }
 
-    // ================================================================== main
+    // main
     public static void main(String[] args) throws Exception {
         if (args.length > 0) BASE = args[0].replaceAll("/+$", "");
         String envUrl = System.getenv("MEOW_URL");
@@ -512,7 +512,7 @@ public class TestRunner {
         System.out.println("Running test cases against " + BASE + " (data from ./" + DATA + ")");
         System.out.println("------------------------------------------------------------------");
 
-        // ============================================================ TC1 - user accounts
+        // TC1 - user accounts
         final String newEmail = in("TC1.1", "email"), newPw = in("TC1.1", "password");
         tc("TC1.1", "Register valid", () -> {
             String email = newEmail, note = "";
@@ -567,7 +567,7 @@ public class TestRunner {
             return null;
         });
 
-        // ============================================================ TC2 - company information
+        // TC2 - company information
         final String[] co = COMPANY_BY_DESIGNER.get(USER_BY_EMAIL.get(desEmail)[0]);
         final String coName = co[0], coDesc = co[1];
         tc("TC2.1", "Create company profile", () -> {
@@ -601,7 +601,7 @@ public class TestRunner {
             return null;
         });
 
-        // ============================================================ TC3 - IDP portfolio
+        // TC3 - IDP portfolio
         final String[] pid = new String[4]; // 0 = current, 1 = past with images
         tc("TC3.1", "Add current IDP", () -> {
             pid[0] = createProject(fDes, "TC3.1 Current IDP", "Added by the test runner", "Details", "Current");
@@ -649,7 +649,7 @@ public class TestRunner {
             check(ui.contains("You have not created any IDPs yet"), "web UI has no 'no projects yet' empty-state message");
             return "API returns an empty list; the web UI shows 'You have not created any IDPs yet' (checked in the served /js/app.js, not in a browser)";
         });
-        // ============================================================ TC4 - customer search
+        // TC4 - customer search
         final String keyword = head(in("TC4.1", "keyword"));
         final String[] kw = new String[1];
         tc("TC4.1", "Keyword search with matches", () -> {
@@ -703,7 +703,7 @@ public class TestRunner {
             return null;
         });
 
-        // ============================================================ TC5 - tracking
+        // TC5 - tracking
         tc("TC5.1", "View increments", () -> {
             int before = stats(fDes, kw[0])[0];
             Resp r = recordView(fCust, kw[0]);
@@ -726,7 +726,7 @@ public class TestRunner {
             check(s[0] == 0 && s[1] == 0, "expected 0 views / 0 shortlists, got " + s[0] + " / " + s[1]);
             return null;
         });
-        // ============================================================ TC6 - platform management
+        // TC6 - platform management
         final String[] cat = new String[2]; // id, name
         tc("TC6.1", "Create category", () -> {
             String name = head(in("TC6.1", "name"));
@@ -797,7 +797,7 @@ public class TestRunner {
         summary();
     }
 
-    // ================================================================== use-case descriptions (PDF)
+    // use-case descriptions (PDF)
     @SuppressWarnings("unchecked")
     static void runUseCases() throws Exception {
         final Sess admin = S_ADMIN, mgr = S_MGR, des = S_DES, desEmpty = S_DESEMPTY;
@@ -806,7 +806,7 @@ public class TestRunner {
 
         sectionHeader("Use-case descriptions (use-case PDF): normal + alternative flows");
 
-        // ------------------------------------------------------------ accounts
+        // accounts
         tc("UC#220", "Fill Customer Registration Form", () -> {
             final String id = "UC#220";
             Resp form = get("/registration-form", null);
@@ -1002,7 +1002,7 @@ public class TestRunner {
             return null;
         });
 
-        // ------------------------------------------------------------ company + verification
+        // company + verification
         tc("UC#231", "Edit Company Details", () -> {
             final String id = "UC#231";
             Resp form = get("/me/company", des);
@@ -1066,7 +1066,7 @@ public class TestRunner {
             return null;
         });
 
-        // ------------------------------------------------------------ IDPs (designer)
+        // IDPs (designer)
         tc("UC#233", "Create IDP", () -> {
             final String id = "UC#233";
             Resp r = json("POST", "/projects", des, "{\"title\":" + q("UC233 IDP " + RUN) + ",\"description\":\"Created by UC#233\",\"projectDetails\":\"Details\",\"status\":\"Current\"}");
@@ -1159,7 +1159,7 @@ public class TestRunner {
             return null;
         });
 
-        // ------------------------------------------------------------ customer
+        // customer
         tc("UC#237", "Search Published IDPs", () -> {
             String word = "ucsearch" + RUN;
             String pub = createProject(des, "UC237 published " + RUN, "a " + word + " apartment", "d", "Current");
@@ -1256,7 +1256,7 @@ public class TestRunner {
             return "3a note: " + dup.messages();
         });
 
-        // ------------------------------------------------------------ designer analytics
+        // designer analytics
         tc("UC#244", "Portfolio Totals", () -> {
             Resp t = get("/me/analytics/totals", des);
             check(t.status == 200, "expected HTTP 200, got " + t.brief());
@@ -1284,7 +1284,7 @@ public class TestRunner {
             return null;
         });
 
-        // ------------------------------------------------------------ platform manager
+        // platform manager
         tc("UC#246", "Create Category", () -> {
             final String id = "UC#246";
             check(get("/categories/form", mgr).status == 200, "step 2: category form not shown");
@@ -1345,7 +1345,7 @@ public class TestRunner {
             return null;
         });
 
-        // ------------------------------------------------------------ reports
+        // reports
         tc("UC#249", "Select Report Period", () -> {
             final String id = "UC#249";
             Resp opts = get("/reports/options", mgr);
@@ -1461,7 +1461,7 @@ public class TestRunner {
         System.exit(fail == 0 ? 0 : 1);
     }
 
-    // ================================================================== minimal JSON reader (no libraries needed)
+    // minimal JSON reader (no libraries needed)
     static final class Json {
         private final String s;
         private int i;

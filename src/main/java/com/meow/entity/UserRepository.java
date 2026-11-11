@@ -6,7 +6,6 @@ import com.meow.workflow.*;
 import java.util.Map;
 import org.springframework.stereotype.Repository;
 
-/** The login diagram calls UserRepository, not User. Session creation remains infrastructure. */
 @Repository
 public class UserRepository extends DiagramEntity {
   private final SessionService sessions;

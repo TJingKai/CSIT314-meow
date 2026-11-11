@@ -19,7 +19,7 @@ public class LogoutController {
 
   public boolean logout(String userId) {
     context.call("LogoutController.logout");
-    session.clearSession(userId);
+    session.clearSession(userId);  // step 3
     return true;
   }
 }

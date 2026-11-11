@@ -19,6 +19,6 @@ public class AccountStatusController {
 
   public boolean updateStatus(String userId, String targetStatus) {
     context.call("AccountStatusController.updateStatus");
-    return user.setStatus(userId, targetStatus);
+    return user.setStatus(userId, targetStatus);  // step 4
   }
 }

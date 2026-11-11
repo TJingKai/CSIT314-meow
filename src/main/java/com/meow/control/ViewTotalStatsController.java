@@ -19,9 +19,9 @@ public class ViewTotalStatsController {
 
   public int[] getTotalStats(String designerId) {
     context.call("ViewTotalStatsController.getTotalStats");
-    if (idp.countIDPs(designerId) == 0) return null;
-    int views = idp.getTotalViews(designerId);
-    int shortlists = idp.getTotalShortlists(designerId);
+    if (idp.countIDPs(designerId) == 0) return null;  // step 3
+    int views = idp.getTotalViews(designerId);  // step 4
+    int shortlists = idp.getTotalShortlists(designerId);  // step 5
     return new int[] {views, shortlists};
   }
 }

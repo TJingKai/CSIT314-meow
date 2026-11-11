@@ -6,3 +6,5 @@ meow.jar
 .vscode/
 .env
 .DS_Store
+test/testdata/
+server.log

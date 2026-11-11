@@ -19,6 +19,6 @@ public class ViewSearchResultsController {
 
   public List<Map<String, Object>> getResults(String keyword) {
     context.call("ViewSearchResultsController.getResults");
-    return idp.findPublishedByKeyword(keyword);
+    return idp.findPublishedByKeyword(keyword);  // step 3
   }
 }

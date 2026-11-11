@@ -18,8 +18,8 @@ public class FavouritesPage {
   }
 
   public void clickMyFavourites() {
-    context.call("FavouritesPage.clickMyFavourites");
-    displayFavourites(view.getFavourites(context.value("customerId")));
+    context.call("FavouritesPage.clickMyFavourites");  // step 1
+    displayFavourites(view.getFavourites(context.value("customerId")));  // step 2, 4
   }
 
   public void displayFavourites(List<Map<String, Object>> idps) {

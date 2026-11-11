@@ -3,7 +3,6 @@ package com.meow.domain;
 import com.meow.repository.Database;
 import java.util.Map;
 
-/** IDP entity rules keep Current/Past separate from publication, archive and moderation state. */
 public record IDP(
     String id,
     String ownerId,

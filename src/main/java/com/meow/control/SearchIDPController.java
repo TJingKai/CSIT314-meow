@@ -19,6 +19,6 @@ public class SearchIDPController {
 
   public List<Map<String, Object>> searchIDPs(String keyword) {
     context.call("SearchIDPController.searchIDPs");
-    return idp.findPublishedByKeyword(keyword);
+    return idp.findPublishedByKeyword(keyword);  // #237 step 3, #268 step 3
   }
 }

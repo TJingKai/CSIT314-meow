@@ -3,7 +3,6 @@ package com.meow.domain;
 import com.meow.repository.Database;
 import java.util.Map;
 
-/** An ordered portfolio photo with an explicit cover selection. */
 public record IDPPhoto(
     String id, String projectId, String uploadId, String externalUrl, int position, boolean cover) {
   public static IDPPhoto from(Map<String, Object> row) {

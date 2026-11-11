@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
-/** HTTP/JSON/file adaptation is separate from the numbered BCE business-call sequences. */
 public abstract class ApiTransport {
   protected final WorkflowContext context;
   protected final Database db;

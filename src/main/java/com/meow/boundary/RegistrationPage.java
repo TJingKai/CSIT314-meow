@@ -23,8 +23,8 @@ public class RegistrationPage {
   }
 
   public void navigateToRegister() {
-    context.call("RegistrationPage.navigateToRegister");
-    displayForm();
+    context.call("RegistrationPage.navigateToRegister");  // step 1
+    displayForm();  // step 2
   }
 
   public void displayForm() {
@@ -33,12 +33,12 @@ public class RegistrationPage {
   }
 
   public void enterDetails(String email, String pwd, String confirmPwd) {
-    context.call("RegistrationPage.enterDetails");
-    boolean valid = validator.validate(email, pwd, confirmPwd);
-    if (valid) enableSubmit();
+    context.call("RegistrationPage.enterDetails");  // step 3
+    boolean valid = validator.validate(email, pwd, confirmPwd);  // step 4
+    if (valid) enableSubmit();  // step 7a
     else if (email == null || !email.matches("[^\\s@]+@[^\\s@]+\\.[^\\s@]+"))
-      displayError("Invalid email format");
-    else displayError("Passwords do not match");
+      displayError("Invalid email format");  // step 7b
+    else displayError("Passwords do not match");  // step 7c
   }
 
   public void enableSubmit() {
@@ -47,11 +47,11 @@ public class RegistrationPage {
   }
 
   public void clickSubmit() {
-    context.call("RegistrationPage.clickSubmit");
-    boolean saved = registration.createAccount(context.value("email"), context.value("password"));
-    if (saved) displaySuccessMsg("Account created successfully");
+    context.call("RegistrationPage.clickSubmit");  // step 1
+    boolean saved = registration.createAccount(context.value("email"), context.value("password"));  // step 2
+    if (saved) displaySuccessMsg("Account created successfully");  // step 6a
     else {
-      displayError("Email is already registered");
+      displayError("Email is already registered");  // step 4b
       context.state().status = 409;
     }
   }

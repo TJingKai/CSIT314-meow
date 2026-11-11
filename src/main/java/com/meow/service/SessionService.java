@@ -21,7 +21,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/** Opaque sessions stored as digests; permissions are read from the current user record. */
 @Service
 public class SessionService {
   public static final String COOKIE = "meow_session";

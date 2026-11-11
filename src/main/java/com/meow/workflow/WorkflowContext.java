@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
 import org.springframework.web.multipart.MultipartFile;
 
-/** Request-local transport state. Diagram methods keep the parameter lists in the report. */
 @Component
 @RequestScope
 public class WorkflowContext {

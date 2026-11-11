@@ -19,6 +19,6 @@ public class AccountSearchController {
 
   public List<Map<String, Object>> searchAccounts(String keyword) {
     context.call("AccountSearchController.searchAccounts");
-    return user.findByKeyword(keyword);
+    return user.findByKeyword(keyword);  // step 5
   }
 }

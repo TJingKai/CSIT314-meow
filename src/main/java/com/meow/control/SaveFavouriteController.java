@@ -24,7 +24,7 @@ public class SaveFavouriteController {
   public int saveFavourite(String idpId, String customerId) {
     context.call("SaveFavouriteController.saveFavourite");
     db.required("SELECT id FROM projects WHERE id=? FOR UPDATE", idpId);
-    if (favourite.isFavourited(idpId, customerId)) return 0;
-    return favourite.saveFavourite(idpId, customerId) ? 1 : -1;
+    if (favourite.isFavourited(idpId, customerId)) return 0;  // step 3
+    return favourite.saveFavourite(idpId, customerId) ? 1 : -1;  // step 4a
   }
 }

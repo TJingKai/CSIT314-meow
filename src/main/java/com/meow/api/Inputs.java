@@ -3,7 +3,6 @@ package com.meow.api;
 import java.util.List;
 import java.util.Map;
 
-/** Input validation shared by JSON and multipart use cases. */
 public final class Inputs {
   private Inputs() {}
 
@@ -52,7 +51,7 @@ public final class Inputs {
 
   public static String password(Map<String, ?> data, String key) {
     if (!(data.get(key) instanceof String value) || value.length() < 10 || value.length() > 128) {
-      throw new ApiException("Password must be 10–128 characters.");
+      throw new ApiException("Password must be 10-128 characters.");
     }
     return (String) data.get(key);
   }

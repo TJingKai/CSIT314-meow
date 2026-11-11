@@ -19,7 +19,7 @@ public class SelectPeriodController {
 
   public Date[] getPeriod(String periodType, Date date) {
     context.call("SelectPeriodController.getPeriod");
-    if (!period.setPeriod(periodType, date)) return null;
-    return period.calculateRange();
+    if (!period.setPeriod(periodType, date)) return null;  // step 5
+    return period.calculateRange();  // step 6a
   }
 }

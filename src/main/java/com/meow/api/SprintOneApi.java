@@ -13,7 +13,6 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-/** Sprint 1 HTTP adapter. Numbered workflow functions live in boundary/control/entity classes. */
 @RestController
 @RequestMapping("/api/v1")
 public class SprintOneApi extends ApiTransport {
@@ -122,7 +121,7 @@ public class SprintOneApi extends ApiTransport {
 
   @GetMapping("/login-form")
   public ResponseEntity<?> loginForm() {
-    login.navigateToLoginPage();
+    login.navigateToLoginPage();  // step 1
     return response();
   }
 
@@ -147,8 +146,8 @@ public class SprintOneApi extends ApiTransport {
     context.state().input.put("remoteAddress", request.getRemoteAddr());
     String email = Inputs.email(body);
     String password = Inputs.text(body, "password", true, 128);
-    login.enterCredentials(email, password);
-    login.clickLogin();
+    login.enterCredentials(email, password);  // step 3
+    login.clickLogin();  // step 4
     return response();
   }
 
@@ -157,7 +156,7 @@ public class SprintOneApi extends ApiTransport {
   public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
     context.state().selectedId = identity.user().id();
     context.state().input.put("tokenHash", SessionService.digest(SessionService.cookie(request)));
-    navigation.clickLogout();
+    navigation.clickLogout();  // step 1
     sessions.clearCookie(response);
     return response();
   }
@@ -165,7 +164,7 @@ public class SprintOneApi extends ApiTransport {
   @GetMapping("/navigation")
   @RequireRole
   public ResponseEntity<?> navigation() {
-    menu.openNavigationMenu(identity.user().role());
+    menu.openNavigationMenu(identity.user().role());  // step 1
     return response();
   }
 
@@ -284,13 +283,13 @@ public class SprintOneApi extends ApiTransport {
   @GetMapping("/companies/{id}")
   public ResponseEntity<?> company(@PathVariable String id) {
     var row = db.find("SELECT owner_id FROM companies WHERE id=?", id);
-    publicCompany.viewPublicProfile(row == null ? id : Database.str(row, "owner_id"));
+    publicCompany.viewPublicProfile(row == null ? id : Database.str(row, "owner_id"));  // step 1
     return response();
   }
 
   @GetMapping("/designers/{id}/company")
   public ResponseEntity<?> designerCompany(@PathVariable String id) {
-    publicCompany.viewPublicProfile(id);
+    publicCompany.viewPublicProfile(id);  // step 1
     return response();
   }
 }

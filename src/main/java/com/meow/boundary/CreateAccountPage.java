@@ -19,8 +19,8 @@ public class CreateAccountPage {
   }
 
   public void navigateToCreateAccount() {
-    context.call("CreateAccountPage.navigateToCreateAccount");
-    displayForm();
+    context.call("CreateAccountPage.navigateToCreateAccount");  // step 1
+    displayForm();  // step 2
   }
 
   public void displayForm() {
@@ -29,7 +29,7 @@ public class CreateAccountPage {
   }
 
   public void enterAccountDetails(String email, String pwd, String confirmPwd, String role) {
-    context.call("CreateAccountPage.enterAccountDetails");
+    context.call("CreateAccountPage.enterAccountDetails");  // step 3
     context
         .state()
         .input
@@ -38,18 +38,18 @@ public class CreateAccountPage {
   }
 
   public void clickCreateAccount() {
-    context.call("CreateAccountPage.clickCreateAccount");
+    context.call("CreateAccountPage.clickCreateAccount");  // step 4
     boolean saved =
-        create.createAccount(
+        create.createAccount(  // step 5
             context.value("email"),
             context.value("password"),
             context.value("confirmPassword"),
             context.value("role"));
-    if (saved) displaySuccessMsg("Account created successfully");
+    if (saved) displaySuccessMsg("Account created successfully");  // step 9a
     else if ("passwordMismatch".equals(context.state().output.get("failure")))
-      displayError("Passwords do not match");
+      displayError("Passwords do not match");  // step 6b
     else {
-      displayError("Email is already in use");
+      displayError("Email is already in use");  // step 7c
       context.state().status = 409;
     }
   }

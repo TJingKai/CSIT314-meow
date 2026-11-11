@@ -5,7 +5,6 @@ import static com.meow.api.Json.object;
 import com.meow.repository.Database;
 import java.util.Map;
 
-/** User entity projection. Password hashes are never included in its public representation. */
 public record User(
     String id,
     String name,

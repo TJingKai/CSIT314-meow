@@ -18,8 +18,8 @@ public class MyProjectsPage {
   }
 
   public void clickMyProjects() {
-    context.call("MyProjectsPage.clickMyProjects");
-    displayIDPList(view.getMyIDPs(context.value("designerId")));
+    context.call("MyProjectsPage.clickMyProjects");  // step 1
+    displayIDPList(view.getMyIDPs(context.value("designerId")));  // step 2, 4
   }
 
   public void displayIDPList(List<Map<String, Object>> idps) {

@@ -7,7 +7,6 @@ import com.meow.workflow.*;
 import java.util.*;
 import org.springframework.stereotype.Repository;
 
-/** Account entity operations named exactly as Sprint 1's diagrams. */
 @Repository
 public class User extends DiagramEntity {
   public User(Database db, Identity identity, WorkflowContext context) {

@@ -16,9 +16,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-/** Explicit demo initialisation. Existing databases are never reset or reseeded. */
 @Component
 public class SeedData implements ApplicationRunner {
+  private static final String ADMIN_EMAIL = "admin@meow.demo";
+  private static final String DEFAULT_PASSWORD = "MEOWDemo!2026";
   private final Database db;
   private final PasswordEncoder passwords;
   private final ObjectMapper json;
@@ -45,7 +46,7 @@ public class SeedData implements ApplicationRunner {
             "Create an administrator from a terminal using java -jar, so passwords can be entered without echo.");
       String email = args.getOptionValues("meow.create-admin").get(0);
       String name = console.readLine("Administrator name: ");
-      char[] first = console.readPassword("Password (10–128 characters): ");
+      char[] first = console.readPassword("Password (10-128 characters): ");
       char[] second = console.readPassword("Confirm password: ");
       try {
         if (!java.util.Arrays.equals(first, second))
@@ -65,21 +66,34 @@ public class SeedData implements ApplicationRunner {
         java.util.Arrays.fill(first, '\0');
         java.util.Arrays.fill(second, '\0');
       }
-      return;
+    } else if (demo) {
+      seed();
     }
-    if (demo) seed();
+    ensureDefaultAdmin();
+  }
+
+  private void ensureDefaultAdmin() {
+    if (db.count("SELECT COUNT(*) FROM users WHERE email=?", ADMIN_EMAIL) > 0) return;
+    db.update(
+        "INSERT INTO users (id,name,email,password_hash,role,status,created_at) "
+            + "VALUES (?,?,?,?, 'admin','active',?)",
+        Database.id(), "MEOW Administrator", ADMIN_EMAIL, passwords.encode(DEFAULT_PASSWORD),
+        Database.now());
   }
 
   @Transactional
   @SuppressWarnings("unchecked")
   public void seed() throws Exception {
-    if (db.count("SELECT COUNT(*) FROM users") > 0) return;
+    if (db.count("SELECT COUNT(*) FROM users WHERE email<>?", ADMIN_EMAIL) > 0
+        || db.count("SELECT COUNT(*) FROM categories") > 0) return;
     Map<String, Object> source;
     try (InputStream input = getClass().getResourceAsStream("/seed.json")) {
       source = json.readValue(input, new TypeReference<>() {});
     }
-    String password = passwords.encode("MEOWDemo!2026");
+    String password = passwords.encode(DEFAULT_PASSWORD);
     for (Map<String, Object> user : (List<Map<String, Object>>) source.get("users")) {
+      if (ADMIN_EMAIL.equals(user.get("email"))
+          && db.count("SELECT COUNT(*) FROM users WHERE email=?", ADMIN_EMAIL) > 0) continue;
       boolean verified = user.get("role").equals("designer") && user.get("status").equals("active");
       db.update(
           "INSERT INTO users (id,name,email,password_hash,role,status,created_at,verified_at) VALUES (?,?,?,?,?,?,?,?)",

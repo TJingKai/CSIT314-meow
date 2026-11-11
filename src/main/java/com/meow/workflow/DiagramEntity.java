@@ -5,7 +5,6 @@ import com.meow.repository.Database;
 import com.meow.service.Identity;
 import java.util.*;
 
-/** Shared infrastructure only; the report's entity methods perform the business operations. */
 public abstract class DiagramEntity {
   protected final Database db;
   protected final Identity identity;

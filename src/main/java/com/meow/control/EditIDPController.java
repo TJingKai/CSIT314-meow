@@ -20,6 +20,6 @@ public class EditIDPController {
   public boolean editIDP(
       String idpId, String title, String description, String projectDetails, String status) {
     context.call("EditIDPController.editIDP");
-    return idp.updateIDP(idpId, title, description, projectDetails, status);
+    return idp.updateIDP(idpId, title, description, projectDetails, status);  // step 3
   }
 }

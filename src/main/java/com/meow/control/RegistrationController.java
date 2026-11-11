@@ -24,9 +24,9 @@ public class RegistrationController {
 
   public boolean createAccount(String email, String pwd) {
     context.call("RegistrationController.createAccount");
-    if (user.isEmailRegistered(email)) return false;
-    String hash = hashPassword(pwd);
-    user.saveUser(email, hash);
+    if (user.isEmailRegistered(email)) return false;  // step 3
+    String hash = hashPassword(pwd);  // step 4a
+    user.saveUser(email, hash);  // step 5a
     return true;
   }
 

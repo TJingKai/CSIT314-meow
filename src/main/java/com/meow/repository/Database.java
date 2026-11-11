@@ -10,7 +10,6 @@ import java.util.UUID;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-/** Parameterised JDBC access. Services own business rules and transaction boundaries. */
 @Repository
 public class Database {
   private static final DateTimeFormatter TIMESTAMP =

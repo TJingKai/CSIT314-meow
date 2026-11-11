@@ -19,9 +19,9 @@ public class VerificationPage {
   }
 
   public void submitDocuments(String designerId) {
-    context.call("VerificationPage.submitDocuments");
-    if (verification.processPending(designerId))
-      displayNotice("Account is pending verification. Publishing restricted.");
+    context.call("VerificationPage.submitDocuments");  // step 1
+    if (verification.processPending(designerId))  // step 2
+      displayNotice("Account is pending verification. Publishing restricted.");  // step 5
     else displayError("Status update failed. Please retry submission.");
   }
 

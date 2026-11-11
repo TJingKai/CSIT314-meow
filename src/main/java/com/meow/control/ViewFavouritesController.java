@@ -19,6 +19,6 @@ public class ViewFavouritesController {
 
   public List<Map<String, Object>> getFavourites(String customerId) {
     context.call("ViewFavouritesController.getFavourites");
-    return favourite.getFavouriteIDPs(customerId);
+    return favourite.getFavouriteIDPs(customerId);  // step 3
   }
 }

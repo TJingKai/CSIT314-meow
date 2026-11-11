@@ -19,12 +19,12 @@ public class EditCategoryController {
 
   public List<Map<String, Object>> getCategories() {
     context.call("EditCategoryController.getCategories");
-    return category.getAllCategories();
+    return category.getAllCategories();  // step 3
   }
 
   public boolean updateCategory(String categoryId, String name, String description) {
     context.call("EditCategoryController.updateCategory");
-    if (category.nameExists(name, categoryId)) return false;
-    return category.updateCategory(categoryId, name, description);
+    if (category.nameExists(name, categoryId)) return false;  // step 9a, 9c
+    return category.updateCategory(categoryId, name, description);  // step 10a
   }
 }

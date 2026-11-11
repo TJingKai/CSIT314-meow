@@ -18,9 +18,9 @@ public class MyIDPPage {
   }
 
   public void changePublishStatus(String idpId, String action) {
-    context.call("MyIDPPage.changePublishStatus");
-    if (publish.setPublishStatus(idpId, action))
-      displayMessage(action.equals("Publish") ? "IDP published successfully" : "IDP unpublished");
+    context.call("MyIDPPage.changePublishStatus");  // step 1
+    if (publish.setPublishStatus(idpId, action))  // step 2
+      displayMessage(action.equals("Publish") ? "IDP published successfully" : "IDP unpublished");  // step 4a, 4b
     else throw new ApiException("Publication could not be updated.");
   }
 

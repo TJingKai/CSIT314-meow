@@ -14,7 +14,6 @@ import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.web.multipart.MultipartFile;
 
-/** Owned file resources, bounded uploads and private business-proof delivery. */
 @Service
 public class UploadService {
   private final Database db;
@@ -144,7 +143,6 @@ public class UploadService {
     try {
       Files.deleteIfExists(directory.resolve(name));
     } catch (IOException ignored) {
-      /* A missing/unavailable file cannot restore a deleted account. */
     }
   }
 }

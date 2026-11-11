@@ -22,11 +22,11 @@ public class ViewIDPDetailsController {
 
   public com.meow.domain.IDP getIDPDetails(String idpId) {
     context.call("ViewIDPDetailsController.getIDPDetails");
-    return idp.getIDP(idpId);
+    return idp.getIDP(idpId);  // step 3
   }
 
   public List<Map<String, Object>> getGallery(String idpId) {
     context.call("ViewIDPDetailsController.getGallery");
-    return photos.getPhotos(idpId);
+    return photos.getPhotos(idpId);  // step 5a
   }
 }

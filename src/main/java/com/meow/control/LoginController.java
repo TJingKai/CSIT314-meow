@@ -30,7 +30,7 @@ public class LoginController {
       propagation = org.springframework.transaction.annotation.Propagation.NOT_SUPPORTED)
   public boolean login(String email, String pwd) {
     context.call("LoginController.login");
-    boolean valid = users.validateUser(email, pwd);
+    boolean valid = users.validateUser(email, pwd);  // step 6
     if (valid) createSession();
     return valid;
   }

@@ -22,8 +22,8 @@ public class DesignerRegistrationController {
   public boolean submitApplication(
       String email, String pwd, String compName, String regNum, File doc) {
     context.call("DesignerRegistrationController.submitApplication");
-    if (designer.isEmailRegistered(email)) return false;
-    designer.saveDesigner(email, pwd, compName, regNum, doc);
+    if (designer.isEmailRegistered(email)) return false;  // step 6
+    designer.saveDesigner(email, pwd, compName, regNum, doc);  // step 7a
     return true;
   }
 }

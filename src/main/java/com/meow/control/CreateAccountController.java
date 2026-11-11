@@ -28,12 +28,12 @@ public class CreateAccountController {
       context.state().output.put("failure", "passwordMismatch");
       return false;
     }
-    if (user.isEmailRegistered(email)) {
+    if (user.isEmailRegistered(email)) {  // step 6a, 6c
       context.state().output.put("failure", "duplicateEmail");
       return false;
     }
-    String hash = hashPassword(pwd);
-    user.saveUserWithRole(email, hash, role);
+    String hash = hashPassword(pwd);  // step 7a
+    user.saveUserWithRole(email, hash, role);  // step 8a
     return true;
   }
 

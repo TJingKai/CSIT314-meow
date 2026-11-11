@@ -29,11 +29,11 @@ public class IDPDetailPage {
   }
 
   public void selectIDP(String idpId) {
-    context.call("IDPDetailPage.selectIDP");
-    var idp = details.getIDPDetails(idpId);
-    var photos = details.getGallery(idpId);
-    displayIDPDetails(idp);
-    displayGallery(photos);
+    context.call("IDPDetailPage.selectIDP");  // step 1
+    var idp = details.getIDPDetails(idpId);  // step 2
+    var photos = details.getGallery(idpId);  // step 4a
+    displayIDPDetails(idp);  // step 6a
+    displayGallery(photos);  // step 7a
   }
 
   public void displayIDPDetails(com.meow.domain.IDP idp) {
@@ -47,20 +47,20 @@ public class IDPDetailPage {
   }
 
   public void saveToFavourites(String idpId, String customerId) {
-    context.call("IDPDetailPage.saveToFavourites");
-    int result = favourite.saveFavourite(idpId, customerId);
+    context.call("IDPDetailPage.saveToFavourites");  // step 1
+    int result = favourite.saveFavourite(idpId, customerId);  // step 2
     context.state().output.put("result", result);
-    if (result == 0) displayMessage("Already in your favourites");
-    else if (result == 1) displayMessage("Saved to favourites");
+    if (result == 0) displayMessage("Already in your favourites");  // step 4b
+    else if (result == 1) displayMessage("Saved to favourites");  // step 5a
     else throw new ApiException("Favourite could not be saved.");
   }
 
   public void openIDP(String idpId) {
-    context.call("IDPDetailPage.openIDP");
-    int result = views.recordView(idpId);
+    context.call("IDPDetailPage.openIDP");  // step 1
+    int result = views.recordView(idpId);  // step 2
     context.state().output.put("result", result);
     if (result == -1) logError("Failed to record view");
-    else if (result > 0) displayViewCount(result);
+    else if (result > 0) displayViewCount(result);  // step 6a
   }
 
   public void displayViewCount(int count) {
@@ -69,12 +69,12 @@ public class IDPDetailPage {
   }
 
   public void saveIDP(String idpId, String userId) {
-    context.call("IDPDetailPage.saveIDP");
-    int result = shortlists.recordShortlist(idpId, userId);
+    context.call("IDPDetailPage.saveIDP");  // step 1
+    int result = shortlists.recordShortlist(idpId, userId);  // step 2
     context.state().output.put("result", result);
-    if (result == 0) logError("Duplicate shortlist not recorded");
-    else if (result == -1) logError("Failed to record shortlist");
-    else displayShortlistCount(result);
+    if (result == 0) logError("Duplicate shortlist not recorded");  // step 4b
+    else if (result == -1) logError("Failed to record shortlist");  // step 4b
+    else displayShortlistCount(result);  // step 6a
   }
 
   public void displayShortlistCount(int count) {

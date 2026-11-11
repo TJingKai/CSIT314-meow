@@ -19,9 +19,9 @@ public class NavigationPage {
 
   public void clickLogout() {
     context.call("NavigationPage.clickLogout");
-    if (logout.logout(context.state().selectedId)) {
-      displayMsg("Logged out successfully");
-      redirectToLogin();
+    if (logout.logout(context.state().selectedId)) {  // step 2
+      displayMsg("Logged out successfully");  // step 4
+      redirectToLogin();  // step 5
     }
   }
 

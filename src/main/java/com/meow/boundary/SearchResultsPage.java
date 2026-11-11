@@ -19,12 +19,12 @@ public class SearchResultsPage {
   }
 
   public void submitSearch(String keyword) {
-    context.call("SearchResultsPage.submitSearch");
-    var idps = results.getResults(keyword);
+    context.call("SearchResultsPage.submitSearch");  // step 1
+    var idps = results.getResults(keyword);  // step 2
     if (idps.isEmpty()) {
       context.state().output.put("idps", idps);
-      displayMessage("No projects match your search");
-    } else displayResults(idps);
+      displayMessage("No projects match your search");  // step 4b
+    } else displayResults(idps);  // step 4a
   }
 
   public void displayResults(List<Map<String, Object>> idps) {

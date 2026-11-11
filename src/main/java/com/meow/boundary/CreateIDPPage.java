@@ -18,9 +18,9 @@ public class CreateIDPPage {
   }
 
   public void submitIDP(String title, String description, String projectDetails, String status) {
-    context.call("CreateIDPPage.submitIDP");
-    if (create.createIDP(context.value("designerId"), title, description, projectDetails, status))
-      displayMessage("IDP created successfully");
+    context.call("CreateIDPPage.submitIDP");  // step 1
+    if (create.createIDP(context.value("designerId"), title, description, projectDetails, status))  // step 2
+      displayMessage("IDP created successfully");  // step 4
     else throw new ApiException("IDP could not be saved.");
   }
 

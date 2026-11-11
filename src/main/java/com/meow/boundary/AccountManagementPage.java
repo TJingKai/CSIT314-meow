@@ -19,23 +19,23 @@ public class AccountManagementPage {
   }
 
   public void navigateToAccountManagement() {
-    context.call("AccountManagementPage.navigateToAccountManagement");
+    context.call("AccountManagementPage.navigateToAccountManagement");  // step 1
     context.state().output.put("view", "accountManagement");
   }
 
   public void enterSearchKeyword(String keyword) {
-    context.call("AccountManagementPage.enterSearchKeyword");
+    context.call("AccountManagementPage.enterSearchKeyword");  // step 2
     context.state().input.put("keyword", keyword);
   }
 
   public void clickSearch() {
-    context.call("AccountManagementPage.clickSearch");
-    var accounts = search.searchAccounts(context.value("keyword"));
+    context.call("AccountManagementPage.clickSearch");  // step 3
+    var accounts = search.searchAccounts(context.value("keyword"));  // step 4
     if (accounts.isEmpty()) {
       context.state().output.put("accounts", accounts);
-      displayError("No accounts found");
+      displayError("No accounts found");  // step 6b
       context.state().status = 200;
-    } else displayAccountList(accounts);
+    } else displayAccountList(accounts);  // step 6a
   }
 
   public void displayAccountList(List<Map<String, Object>> accounts) {

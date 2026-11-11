@@ -19,6 +19,6 @@ public class ViewIDPStatsController {
 
   public List<Map<String, Object>> getStatsPerIDP(String designerId) {
     context.call("ViewIDPStatsController.getStatsPerIDP");
-    return idp.getStatsByDesigner(designerId);
+    return idp.getStatsByDesigner(designerId);  // step 3
   }
 }

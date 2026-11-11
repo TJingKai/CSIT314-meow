@@ -1,65 +1,88 @@
-# MEOW — Java implementation of Sprints 1–3
+# MEOW - CSIT314 interior design platform (Sprints 1-3)
 
-This edition implements the **36 completed sprint stories** in the supplied CSIT314 Final Report. Each use case has the boundary, controller and entity method names from its diagrams. It is a separate Java application; it does not edit or replace the Python project.
+Java implementation of the 36 completed sprint stories. Each use case uses the boundary, controller and entity names from its diagrams.
 
-## Run on Windows
+Needs a Java 17 or newer **JDK** (`java -version` and `javac -version` should both work). The prebuilt `meow.jar` already contains its dependencies, so no database server, Python or Node is needed.
 
-1. Extract the entire meow.zip into a new folder.
-2. Install Java **17 or newer** and make sure `java -version` works.
-3. Double-click `start-windows.bat`.
-4. Open **http://127.0.0.1:8000**. Keep the terminal open while using MEOW.
+## Windows
 
-The prebuilt `meow.jar` includes its Java dependencies. Python, Node and a separate database server are unnecessary to run it. HTML, CSS and a small browser JavaScript client render the website; all application workflows and persistence run in Java.
-
-On macOS/Linux: `sh start.sh`. To rebuild and test on Windows: `build-windows.bat`; elsewhere: `sh build.sh`. Maven Wrapper downloads require internet access during a source build. Editing Java source requires rebuilding the JAR.
-
-## Demo accounts
-
-All four use password **MEOWDemo!2026**:
-
-| Role | Email |
+| File | What it does |
 | --- | --- |
-| Customer | customer@meow.demo |
-| Interior designer | designer@meow.demo |
-| User admin | admin@meow.demo |
-| Platform manager | manager@meow.demo |
+| `start-demo.bat` | Deletes the old database, starts MEOW with the demo accounts, generates the test data, loads it and checks the database. Opens the site when it is ready. |
+| `run-tests.bat` | Same reset and the same fixed test data (seed 20261108), then runs the test runner. `run-tests.bat 12345` uses another seed if you want different data. |
+| `start-windows.bat` | Starts MEOW and keeps the existing data. |
+| `build-windows.bat` | Rebuilds `meow.jar` from source with Maven (needs internet the first time). |
 
-The launchers explicitly enable demo seeding. A fresh database is seeded once; existing data is preserved. Demo interiors use remote images, so those images need internet access. New uploads remain local.
+The server runs in a separate window called "MEOW server". Close that window to stop it. Both demo scripts stop an older MEOW server on the same port first.
+
+`start-demo.bat` and `run-tests.bat` both call `test\prepare-demo.bat`, which does these steps:
+
+1. Stops a MEOW server already running on the port (only if it is a Java process; another program on the port stops the script).
+2. Deletes `instance\`, which holds the database and uploads.
+3. Starts MEOW with the demo accounts in the "MEOW server" window.
+4. Generates the test data into `test\testdata` with `TestDataGenerator.java` (seed 20261108 unless another is given).
+5. Checks the CSV files with `DataCheck.java csv`.
+6. Loads them through the REST API with `TestDataLoader.java`, then compares the database with the CSV files using `DataCheck.java db`.
+
+It first checks that `java`, `javac` and `meow.jar` are present. If any step fails, the script stops and shows the error. `run-tests.bat` then runs `TestRunner.java` and writes `test\testdata\test_results.csv`. The server keeps running afterwards.
+
+| To | Run |
+| --- | --- |
+| Demo the app with test data | `start-demo.bat` |
+| Get the PASS/FAIL results | `run-tests.bat` |
+| Continue with the data from last time | `start-windows.bat` |
+| Rebuild after changing Java code | `build-windows.bat` |
+
+On macOS/Linux use `sh start-demo.sh`, `sh run-tests.sh`, `sh start.sh` and `sh build.sh`.
+
+## Accounts
+
+The admin account is always created, even without demo data:
+
+| Role | Email | Password |
+| --- | --- | --- |
+| User admin | admin@meow.demo | MEOWDemo!2026 |
+| Platform manager | manager@meow.demo | MEOWDemo!2026 |
+| Interior designer | designer@meow.demo | MEOWDemo!2026 |
+| Customer | customer@meow.demo | MEOWDemo!2026 |
+
+The generated users (100 customers, 100 designers, 3 admins) and their passwords are in `test/testdata/users.csv` after a demo or test run. Do not use these passwords on a public deployment.
+
+## Test tools (`test/`)
+
+- `TestDataGenerator.java` writes the CSV files in `test/testdata`. Same seed gives the same data (default seed 20261108).
+- `DataCheck.java csv` checks the CSV files: unique ids and emails, valid references, stats that match the raw view and save rows.
+- `TestDataLoader.java` loads the CSV files into the running app through the REST API.
+- `DataCheck.java db` compares the database with the CSV files: every user, company, category, IDP, photo, favourite, view and shortlist, plus orphan rows, duplicate shortlists, owner views and cover photos.
+- `TestRunner.java` runs TC1.1 to TC6.6 and the normal and alternative flows of every use case, and writes `test/testdata/test_results.csv`.
+
+The tools run with `java File.java` from the `test` folder, so they need no separate compile step.
 
 ## Sprint scope
 
-- Sprint 1: #220–232 and #256 (14 stories).
-- Sprint 2: #233–240, #242, #263, #266 and #273 (12 stories).
-- Sprint 3: #241, #243–251 (10 stories).
+- Sprint 1: #220-232 and #256 (14 stories).
+- Sprint 2: #233-240, #242, #263, #266 and #273 (12 stories).
+- Sprint 3: #241, #243-251 (10 stories).
 
-IDP creation, photo upload/cover selection, category assignment and publication are separate actions. Saving a favourite and recording its shortlist are separate workflows. Reports count first publication as a new IDP, use Singapore calendar dates, and produce daily rows plus a Total row.
+Trailing `// step N` comments in the source mark the lines that match each step of a story's sequence diagram. Steps in an alternative branch carry a letter, for example `// step 7a`.
 
-## Review the diagram alignment
+`src/test/resources/sprint-contracts.json` lists the expected call order for each story. `SprintSequenceIntegrationTest` sends real HTTP requests, compares the recorded calls with that list and checks the database result. It runs as part of `build-windows.bat`.
 
-Start with [docs/DIAGRAM_ALIGNMENT.md](docs/DIAGRAM_ALIGNMENT.md), which maps all 36 stories to source and records inconsistencies in the report. Reference diagrams are in `docs/diagrams/`. `docs/sprint-contracts.json` contains the manually transcribed normal call orders. Tests compare those orders with method-entry traces from real HTTP requests and also assert database outcomes.
+## Project structure
 
-The report has contradictory or omitted details; these are explicitly documented. Therefore the tests establish conformity to the selected sequence paths, not proof that every conflicting diagram can simultaneously be satisfied.
+- `api/` REST transport, input conversion and role checks.
+- `boundary/` page methods from the diagrams.
+- `control/` use-case controllers.
+- `entity/` entities and SQL.
+- `workflow/` request state and report calculations.
+- `src/main/resources/static/` browser UI.
 
-## Project structure and coding practices
-
-- `api/`: versioned REST transport, input conversion and role restrictions.
-- `boundary/`: named page/presenter methods from the report.
-- `control/`: named use-case controllers and transaction boundaries.
-- `entity/`: named entities and parameterized persistence operations.
-- `workflow/`: request state, result adaptation and report calculations.
-- `src/main/resources/static/`: MEOW browser UI and cat logo.
-- `src/test/`: sequence contracts and integration tests.
-
-Spring Boot 3.5.16, Java 17, JDBC and file-backed H2 are used. Authentication uses PBKDF2 password hashing, HttpOnly opaque session cookies, CSRF tokens and throttled login attempts. Protected operations check role, account status and ownership on the server. Private registration proof is not included in public company responses. Database changes use transactions, foreign keys and unique constraints. Google Java Format is checked by Maven `verify`.
-
-The default data directory is `instance/` beside the application. Keep it to preserve your accounts, uploads and projects. This is a local coursework prototype. If adapting it for public hosting, configure HTTPS, secure cookies, credentials, backups and hosting access controls first.
+Spring Boot 3.5.16, Java 17, JDBC and a file-based H2 database in `instance/`. Passwords are hashed with PBKDF2, sessions use HttpOnly cookies with CSRF tokens, and login is locked for 15 minutes after 10 failed attempts.
 
 ## Configuration
 
-The defaults bind to `127.0.0.1:8000`. Environment variables: `MEOW_PORT`, `MEOW_HOST`, `MEOW_DATABASE_URL`, `MEOW_DATABASE_PASSWORD`, `MEOW_UPLOAD_DIRECTORY`, `MEOW_COOKIE_SECURE`, `MEOW_SEED_DEMO`. The launch scripts enable demo accounts explicitly.
+Defaults: `127.0.0.1:8000`. Environment variables: `MEOW_PORT`, `MEOW_HOST`, `MEOW_DATABASE_URL`, `MEOW_DATABASE_PASSWORD`, `MEOW_UPLOAD_DIRECTORY`, `MEOW_COOKIE_SECURE`, `MEOW_SEED_DEMO`.
 
-For a fresh non-demo database run `java -jar meow.jar` and create an administrator interactively with `java -jar meow.jar --meow.create-admin=you@example.com` from a terminal. Do not use the demonstration credentials on a public deployment.
+An extra administrator can be created from a terminal with `java -jar meow.jar --meow.create-admin=you@example.com`.
 
-To inspect method traces locally: `java -jar meow.jar --meow.seed-demo=true --meow.sequence-trace=true`. Responses then include `sequence` and separately labelled `infrastructure`. Tracing is off by default.
-
-To add this prototype to a shared GitHub repository safely, use a new branch and a separate folder such as `prototypes/meow-java-sprints/`, then open a pull request. Do not commit the `instance/` directory or overwrite the existing prototype.
+Method traces: `java -jar meow.jar --meow.seed-demo=true --meow.sequence-trace=true`. Responses then include `sequence` and `infrastructure`.

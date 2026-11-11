@@ -18,8 +18,8 @@ public class SearchPage {
   }
 
   public void searchIDP(String keyword) {
-    context.call("SearchPage.searchIDP");
-    displayResults(search.searchIDPs(keyword));
+    context.call("SearchPage.searchIDP");  // #237 step 1, #268 step 1
+    displayResults(search.searchIDPs(keyword));  // #237 step 2/4, #268 step 2/4
   }
 
   public void displayResults(List<Map<String, Object>> idps) {

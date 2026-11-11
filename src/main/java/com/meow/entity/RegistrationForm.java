@@ -4,7 +4,6 @@ import com.meow.workflow.WorkflowContext;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
 
-/** #220 form entity. Stores the entered values only for the lifetime of this request. */
 @Component
 @RequestScope
 public class RegistrationForm {

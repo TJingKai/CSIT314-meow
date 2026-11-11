@@ -20,8 +20,8 @@ public class DesignerRegistrationPage {
   }
 
   public void navigateToDesignerRegister() {
-    context.call("DesignerRegistrationPage.navigateToDesignerRegister");
-    displayForm();
+    context.call("DesignerRegistrationPage.navigateToDesignerRegister");  // step 1
+    displayForm();  // step 2
   }
 
   public void displayForm() {
@@ -31,7 +31,7 @@ public class DesignerRegistrationPage {
 
   public void enterDetailsAndUpload(
       String email, String pwd, String compName, String regNum, File doc) {
-    context.call("DesignerRegistrationPage.enterDetailsAndUpload");
+    context.call("DesignerRegistrationPage.enterDetailsAndUpload");  // step 3
     this.email = email;
     this.pwd = pwd;
     this.compName = compName;
@@ -40,11 +40,11 @@ public class DesignerRegistrationPage {
   }
 
   public void clickSubmitApplication() {
-    context.call("DesignerRegistrationPage.clickSubmitApplication");
-    if (registration.submitApplication(email, pwd, compName, regNum, doc))
-      displayMsg("Application submitted successfully");
+    context.call("DesignerRegistrationPage.clickSubmitApplication");  // step 4
+    if (registration.submitApplication(email, pwd, compName, regNum, doc))  // step 5
+      displayMsg("Application submitted successfully");  // step 8a
     else {
-      displayError("Email is already registered");
+      displayError("Email is already registered");  // step 7b
       context.state().status = 409;
     }
   }

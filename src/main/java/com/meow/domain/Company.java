@@ -5,7 +5,6 @@ import static com.meow.api.Json.object;
 import com.meow.repository.Database;
 import java.util.Map;
 
-/** Designer company entity. Private proof is included only in an authorised review. */
 public record Company(
     String id,
     String ownerId,

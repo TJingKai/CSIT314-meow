@@ -1,4 +1,3 @@
-/** Same-origin REST client. Authentication uses HttpOnly session cookies. */
 export class ApiError extends Error {
   constructor(message, status, code) {
     super(message);

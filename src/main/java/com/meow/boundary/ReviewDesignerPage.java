@@ -19,9 +19,9 @@ public class ReviewDesignerPage {
   }
 
   public void viewPendingApplication(String designerId) {
-    context.call("ReviewDesignerPage.viewPendingApplication");
+    context.call("ReviewDesignerPage.viewPendingApplication");  // step 1
     context.state().selectedId = designerId;
-    displayApplication(context.state().output);
+    displayApplication(context.state().output);  // step 2
   }
 
   public void displayApplication(Map<String, Object> details) {
@@ -30,18 +30,18 @@ public class ReviewDesignerPage {
   }
 
   public void clickApprove(String designerId) {
-    context.call("ReviewDesignerPage.clickApprove");
-    if (approval.approveDesigner(designerId)) {
-      displaySuccessMsg("Designer approved successfully");
-      refreshQueue();
+    context.call("ReviewDesignerPage.clickApprove");  // step 3a, 3c
+    if (approval.approveDesigner(designerId)) {  // step 4a, 4c
+      displaySuccessMsg("Designer approved successfully");  // step 7a
+      refreshQueue();  // step 8a
     } else displayError("Failed to update designer status. Please try again.");
   }
 
   public void clickReject(String designerId) {
-    context.call("ReviewDesignerPage.clickReject");
-    if (approval.rejectDesigner(designerId)) {
-      displaySuccessMsg("Designer registration rejected");
-      refreshQueue();
+    context.call("ReviewDesignerPage.clickReject");  // step 3b
+    if (approval.rejectDesigner(designerId)) {  // step 4b
+      displaySuccessMsg("Designer registration rejected");  // step 6b
+      refreshQueue();  // step 7b
     } else displayError("Failed to update designer status. Please try again.");
   }
 
