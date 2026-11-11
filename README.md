@@ -4,7 +4,7 @@ This edition implements the **36 completed sprint stories** in the supplied CSIT
 
 ## Run on Windows
 
-1. Extract the entire ZIP into a new folder.
+1. Extract the entire meow.zip into a new folder.
 2. Install Java **17 or newer** and make sure `java -version` works.
 3. Double-click `start-windows.bat`.
 4. Open **http://127.0.0.1:8000**. Keep the terminal open while using MEOW.
