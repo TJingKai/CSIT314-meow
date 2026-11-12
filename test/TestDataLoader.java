@@ -9,7 +9,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -31,8 +30,6 @@ public class TestDataLoader {
     static String BASE = "http://127.0.0.1:8000";
     static final String DATA = "testdata";
     static final String DEMO_PASSWORD = "MEOWDemo!2026";
-    static final byte[] PNG = Base64.getDecoder().decode(
-            "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==");
     static final byte[] PDF = "%PDF-1.4 test proof document".getBytes(StandardCharsets.UTF_8);
     static final HttpClient HTTP = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(10)).build();
 
@@ -298,8 +295,10 @@ public class TestDataLoader {
         System.out.println("users      : " + cust + " customers, " + des + " designers (with company profile), " + adm + " admins");
 
         // 3. IDPs
-        Map<String, Integer> photoCount = new HashMap<>();
-        for (List<String> im : images) photoCount.merge(im.get(1), 1, Integer::sum);
+        Map<String, List<String>> photoNames = new HashMap<>();
+        for (List<String> im : images) photoNames.computeIfAbsent(im.get(1), k -> new ArrayList<>()).add(im.get(2));
+        Path photoDir = Paths.get(DATA, "photos");
+        Files.createDirectories(photoDir);
         Map<String, Map<String, String>> ownTitles = new HashMap<>();   // designer csv id -> title -> app id
         Map<String, String> idpApp = new HashMap<>();                  // csv idp id -> app idp id
         int created = 0, reused = 0, skippedDeleted = 0;
@@ -328,9 +327,13 @@ public class TestDataLoader {
             idpApp.put(p.get(0), pid);
             created++;
 
-            int n = photoCount.getOrDefault(p.get(0), 1);
+            List<String> names = photoNames.getOrDefault(p.get(0), List.of(p.get(0).toLowerCase() + "_1.jpg"));
             Multipart m = new Multipart();
-            for (int i = 0; i < n; i++) m.file("photos", "photo" + i + ".png", "image/png", PNG);
+            for (int i = 0; i < names.size(); i++) {
+                byte[] jpg = StockPhoto.variant(p.get(0), i);
+                Files.write(photoDir.resolve(names.get(i)), jpg);
+                m.file("photos", names.get(i), "image/jpeg", jpg);
+            }
             m.field("coverIndex", "0");
             Resp up = send("POST", "/projects/" + pid + "/photos", d, "multipart/form-data; boundary=" + m.boundary, m.build());
             if (up.status != 200) fail("photos for " + p.get(0), up);
@@ -490,6 +493,66 @@ public class TestDataLoader {
                     }
                 } else sb.append(c);
             }
+        }
+    }
+
+    /**
+     * Test IDP photos made from the interior photos bundled in ../meow.jar (static/assets/photos).
+     * Each photo is a different crop of one of them, sometimes mirrored, so cards do not repeat.
+     */
+    static class StockPhoto {
+        static final int W = 1200, H = 800;
+        static List<java.awt.image.BufferedImage> photos;
+
+        static synchronized List<java.awt.image.BufferedImage> photos() throws Exception {
+            if (photos != null) return photos;
+            System.setProperty("java.awt.headless", "true");
+            Path jar = Paths.get("..", "meow.jar");
+            if (!Files.exists(jar)) throw new IllegalStateException("meow.jar not found next to the test folder");
+            photos = new ArrayList<>();
+            try (java.util.zip.ZipFile zip = new java.util.zip.ZipFile(jar.toFile())) {
+                List<String> names = new ArrayList<>();
+                zip.stream().map(java.util.zip.ZipEntry::getName)
+                        .filter(n -> n.matches("BOOT-INF/classes/static/assets/photos/[^/]+\\.jpg")).sorted().forEach(names::add);
+                for (String n : names)
+                    try (java.io.InputStream in = zip.getInputStream(zip.getEntry(n))) {
+                        photos.add(javax.imageio.ImageIO.read(in));
+                    }
+            }
+            if (photos.isEmpty()) throw new IllegalStateException("no photos in meow.jar static/assets/photos");
+            return photos;
+        }
+
+        static byte[] variant(String id, int index) throws Exception {
+            List<java.awt.image.BufferedImage> all = photos();
+            java.util.Random rnd = new java.util.Random((id + "#" + index).hashCode());
+            java.awt.image.BufferedImage src = all.get(Math.floorMod(rnd.nextInt(), all.size()));
+            double zoom = 0.62 + rnd.nextDouble() * 0.38;
+            int cw = (int) Math.min(src.getWidth() * zoom, src.getHeight() * zoom * 1.5);
+            int ch = cw * 2 / 3;
+            int x = rnd.nextInt(src.getWidth() - cw + 1), y = rnd.nextInt(src.getHeight() - ch + 1);
+            boolean mirror = rnd.nextBoolean();
+
+            java.awt.image.BufferedImage out = new java.awt.image.BufferedImage(W, H, java.awt.image.BufferedImage.TYPE_INT_RGB);
+            java.awt.Graphics2D g = out.createGraphics();
+            g.setRenderingHint(java.awt.RenderingHints.KEY_INTERPOLATION, java.awt.RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+            g.setRenderingHint(java.awt.RenderingHints.KEY_RENDERING, java.awt.RenderingHints.VALUE_RENDER_QUALITY);
+            if (mirror) g.drawImage(src, W, 0, 0, H, x, y, x + cw, y + ch, null);
+            else g.drawImage(src, 0, 0, W, H, x, y, x + cw, y + ch, null);
+            g.dispose();
+
+            javax.imageio.ImageWriter writer = javax.imageio.ImageIO.getImageWritersByFormatName("jpg").next();
+            javax.imageio.ImageWriteParam param = writer.getDefaultWriteParam();
+            param.setCompressionMode(javax.imageio.ImageWriteParam.MODE_EXPLICIT);
+            param.setCompressionQuality(0.82f);
+            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+            try (javax.imageio.stream.ImageOutputStream ios = javax.imageio.ImageIO.createImageOutputStream(bytes)) {
+                writer.setOutput(ios);
+                writer.write(null, new javax.imageio.IIOImage(out, null, null), param);
+            } finally {
+                writer.dispose();
+            }
+            return bytes.toByteArray();
         }
     }
 }

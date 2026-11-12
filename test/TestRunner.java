@@ -41,9 +41,25 @@ public class TestRunner {
     static final String DATA = "testdata";
     static final String DEMO_PASSWORD = "MEOWDemo!2026";
     static final ZoneId SGT = ZoneId.of("Asia/Singapore");
-    // 1x1 PNG
+    // 1x1 PNG, only used when TestDataLoader has not saved any photos in testdata/photos
     static final byte[] PNG = Base64.getDecoder().decode(
             "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==");
+    static List<Path> photoFiles;
+    static int photoTurn = 0;
+
+    /** Next test photo: the room pictures written by TestDataLoader, in turn. */
+    static byte[] photo() throws Exception {
+        if (photoFiles == null) {
+            Path dir = Paths.get(DATA, "photos");
+            photoFiles = new ArrayList<>();
+            if (Files.isDirectory(dir))
+                try (var files = Files.list(dir)) {
+                    files.filter(f -> f.toString().endsWith(".jpg")).sorted().forEach(photoFiles::add);
+                }
+        }
+        if (photoFiles.isEmpty()) return PNG;
+        return Files.readAllBytes(photoFiles.get((photoTurn++ * 7) % photoFiles.size()));
+    }
     static final byte[] PDF = "%PDF-1.4 test proof document".getBytes(StandardCharsets.UTF_8);
 
     static final HttpClient HTTP = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(10)).build();
@@ -318,7 +334,7 @@ public class TestRunner {
 
     static Resp uploadPhotos(Sess d, String pid, int count) throws Exception {
         Multipart m = new Multipart();
-        for (int i = 0; i < count; i++) m.file("photos", "photo" + i + ".png", "image/png", PNG);
+        for (int i = 0; i < count; i++) m.file("photos", "photo" + i + ".jpg", "image/jpeg", photo());
         m.field("coverIndex", "0");
         return send("POST", "/projects/" + pid + "/photos", d, "multipart/form-data; boundary=" + m.boundary, m.build());
     }
@@ -443,7 +459,7 @@ public class TestRunner {
     static Resp photos(Sess d, String pid, String cover, String[][] files) throws Exception {
         Multipart m = new Multipart();
         for (String[] f : files)
-            m.file("photos", f[0], f[1], f[2].equals("png") ? PNG : "MZ not an image".getBytes(StandardCharsets.UTF_8));
+            m.file("photos", f[0], f[1], f[2].equals("png") ? photo() : "MZ not an image".getBytes(StandardCharsets.UTF_8));
         m.field("coverIndex", cover);
         return send("POST", "/projects/" + pid + "/photos", d, "multipart/form-data; boundary=" + m.boundary, m.build());
     }

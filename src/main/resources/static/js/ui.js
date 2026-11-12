@@ -25,8 +25,9 @@ export const navigate = (path) => {
 };
 let toastTimeout;
 
-export function toast(message) {
+export function toast(message, kind = "info") {
   $("#toast").textContent = message;
+  $("#toast").className = kind;
   $("#toast").style.display = "block";
   clearTimeout(toastTimeout);
   toastTimeout = setTimeout(() => {

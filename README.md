@@ -87,7 +87,7 @@ If any step fails, the script stops and shows the error. `run-tests.bat 12345` u
 
 - `TestDataGenerator.java` writes the CSV files in `test\testdata`. The same seed always gives the same data.
 - `DataCheck.java csv` checks the CSV files: unique ids and emails, valid references, and stats that match the raw view and save rows.
-- `TestDataLoader.java` loads the CSV files into the running app through the REST API.
+- `TestDataLoader.java` loads the CSV files into the running app through the REST API. Every IDP photo is a different crop of the interior photos bundled in `meow.jar`; they are also saved in `test\testdata\photos`, and `TestRunner.java` reuses them for the IDPs it creates.
 - `DataCheck.java db` compares the database with the CSV files: every user, company, category, IDP, photo, favourite, view and shortlist, plus orphan rows, duplicate shortlists, owner views and cover photos.
 - `TestRunner.java` runs TC1.1 to TC6.6 and the normal and alternative flows of every use case, and writes `test\testdata\test_results.csv`.
 
@@ -105,6 +105,7 @@ Only needed after changing the Java code. Requires internet the first time (Mave
 - Trailing `// step N` comments in the source mark the lines that match each step of a story's sequence diagram. Steps in an alternative branch carry a letter, for example `// step 7a`.
 - `src/test/resources/sprint-contracts.json` lists the expected call order for each story. `SprintSequenceIntegrationTest` sends real HTTP requests, compares the recorded calls with that list and checks the database result.
 - Packages: `api/` REST transport, input conversion and role checks; `boundary/` page methods from the diagrams; `control/` use-case controllers; `entity/` entities and SQL; `workflow/` request state and report calculations; `src/main/resources/static/` browser UI.
+- Interior photos (`src/main/resources/static/assets/photos`) are from Unsplash and used under the Unsplash License. They are bundled, so the demo works without internet.
 - Spring Boot 3.5.16, Java 17, JDBC and a file-based H2 database in `instance\`. Passwords are hashed with PBKDF2, sessions use HttpOnly cookies with CSRF tokens, and login is locked for 15 minutes after 10 failed attempts.
 
 ## Configuration
