@@ -1,4 +1,4 @@
-# MEOW - CSIT314 interior design platform
+# MEOW - CSIT314 interior design platform (Sprints 1-3)
 
 An online platform that matches renovation customers with interior designers. It covers the 36 completed sprint stories, and each use case uses the boundary, controller and entity names from its diagrams.
 
