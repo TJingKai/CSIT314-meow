@@ -1,0 +1,505 @@
+[
+  {
+    "story": 220,
+    "sprint": 1,
+    "title": "Fill Customer Registration Form",
+    "sequenceImage": "image98.png",
+    "expectedCalls": [
+      "RegistrationPage.navigateToRegister",
+      "RegistrationPage.displayForm",
+      "RegistrationPage.enterDetails",
+      "FormValidator.validate",
+      "RegistrationForm.setDetails",
+      "RegistrationForm.isValid",
+      "RegistrationPage.enableSubmit"
+    ]
+  },
+  {
+    "story": 221,
+    "sprint": 1,
+    "title": "Create Customer Account",
+    "sequenceImage": "image144.png",
+    "expectedCalls": [
+      "RegistrationPage.clickSubmit",
+      "RegistrationController.createAccount",
+      "User.isEmailRegistered",
+      "RegistrationController.hashPassword",
+      "User.saveUser",
+      "RegistrationPage.displaySuccessMsg"
+    ]
+  },
+  {
+    "story": 222,
+    "sprint": 1,
+    "title": "Register Interior Designer Account",
+    "sequenceImage": "image21.png",
+    "expectedCalls": [
+      "DesignerRegistrationPage.navigateToDesignerRegister",
+      "DesignerRegistrationPage.displayForm",
+      "DesignerRegistrationPage.enterDetailsAndUpload",
+      "DesignerRegistrationPage.clickSubmitApplication",
+      "DesignerRegistrationController.submitApplication",
+      "InteriorDesigner.isEmailRegistered",
+      "InteriorDesigner.saveDesigner",
+      "DesignerRegistrationPage.displayMsg"
+    ]
+  },
+  {
+    "story": 223,
+    "sprint": 1,
+    "title": "Set Account Pending Verification",
+    "sequenceImage": "image106.png",
+    "expectedCalls": [
+      "VerificationPage.submitDocuments",
+      "VerificationController.processPending",
+      "InteriorDesigner.setStatus",
+      "InteriorDesigner.disablePublish",
+      "VerificationPage.displayNotice"
+    ]
+  },
+  {
+    "story": 224,
+    "sprint": 1,
+    "title": "Log In",
+    "sequenceImage": "image49.png",
+    "expectedCalls": [
+      "LoginPage.navigateToLoginPage",
+      "LoginPage.displayLoginForm",
+      "LoginPage.enterCredentials",
+      "LoginPage.clickLogin",
+      "LoginController.login",
+      "UserRepository.validateUser",
+      "LoginPage.displayMsg"
+    ]
+  },
+  {
+    "story": 225,
+    "sprint": 1,
+    "title": "Log Out",
+    "sequenceImage": "image92.png",
+    "expectedCalls": [
+      "NavigationPage.clickLogout",
+      "LogoutController.logout",
+      "Session.clearSession",
+      "NavigationPage.displayMsg",
+      "NavigationPage.redirectToLogin"
+    ]
+  },
+  {
+    "story": 226,
+    "sprint": 1,
+    "title": "Role-Based Screens",
+    "sequenceImage": "image14.png",
+    "expectedCalls": [
+      "AppMenuView.openNavigationMenu",
+      "AccessController.getAuthorizedScreens",
+      "UserRole.getPermissions",
+      "AppMenuView.renderMenu"
+    ]
+  },
+  {
+    "story": 227,
+    "sprint": 1,
+    "title": "Search Accounts",
+    "sequenceImage": "image75.png",
+    "expectedCalls": [
+      "AccountManagementPage.navigateToAccountManagement",
+      "AccountManagementPage.enterSearchKeyword",
+      "AccountManagementPage.clickSearch",
+      "AccountSearchController.searchAccounts",
+      "User.findByKeyword",
+      "AccountManagementPage.displayAccountList"
+    ]
+  },
+  {
+    "story": 228,
+    "sprint": 1,
+    "title": "Create Account for Any Role",
+    "sequenceImage": "image88.png",
+    "expectedCalls": [
+      "CreateAccountPage.navigateToCreateAccount",
+      "CreateAccountPage.displayForm",
+      "CreateAccountPage.enterAccountDetails",
+      "CreateAccountPage.clickCreateAccount",
+      "CreateAccountController.createAccount",
+      "User.isEmailRegistered",
+      "CreateAccountController.hashPassword",
+      "User.saveUserWithRole",
+      "CreateAccountPage.displaySuccessMsg"
+    ]
+  },
+  {
+    "story": 229,
+    "sprint": 1,
+    "title": "Suspend or Reactivate Account",
+    "sequenceImage": "image62.png",
+    "expectedCalls": [
+      "ManageAccountPage.viewAccountDetails",
+      "ManageAccountPage.clickUpdateStatus",
+      "AccountStatusController.updateStatus",
+      "User.setStatus",
+      "ManageAccountPage.displaySuccessMsg",
+      "ManageAccountPage.refreshView"
+    ]
+  },
+  {
+    "story": 230,
+    "sprint": 1,
+    "title": "Delete Account",
+    "sequenceImage": "image130.png",
+    "expectedCalls": [
+      "ManageAccountPage.viewAccountDetails",
+      "ManageAccountPage.clickDelete",
+      "ManageAccountPage.showConfirmationPrompt",
+      "ManageAccountPage.confirmDelete",
+      "DeleteAccountController.deleteUser",
+      "User.removeAccount",
+      "ManageAccountPage.displaySuccessMsg",
+      "ManageAccountPage.refreshView"
+    ]
+  },
+  {
+    "story": 256,
+    "sprint": 1,
+    "title": "Approve or Reject Designer",
+    "sequenceImage": "image32.png",
+    "expectedCalls": [
+      "ReviewDesignerPage.viewPendingApplication",
+      "ReviewDesignerPage.displayApplication",
+      "ReviewDesignerPage.clickApprove",
+      "DesignerApprovalController.approveDesigner",
+      "InteriorDesigner.setStatus",
+      "InteriorDesigner.enablePublish",
+      "ReviewDesignerPage.displaySuccessMsg",
+      "ReviewDesignerPage.refreshQueue"
+    ]
+  },
+  {
+    "story": 231,
+    "sprint": 1,
+    "title": "Edit Company Details",
+    "sequenceImage": "image118.png",
+    "expectedCalls": [
+      "CompanyProfilePage.viewCompanyProfile",
+      "CompanyProfilePage.displayForm",
+      "CompanyProfilePage.submitDetails",
+      "CompanyProfileController.saveProfile",
+      "CompanyProfile.isUenExists",
+      "CompanyProfile.updateDetails",
+      "CompanyProfilePage.displaySuccessMsg",
+      "CompanyProfilePage.refreshPage"
+    ]
+  },
+  {
+    "story": 232,
+    "sprint": 1,
+    "title": "Public Company Profile",
+    "sequenceImage": "image23.png",
+    "expectedCalls": [
+      "PublicCompanyProfilePage.viewPublicProfile",
+      "ViewCompanyProfileController.getPublicProfile",
+      "CompanyProfile.getDetails",
+      "PublicCompanyProfilePage.renderProfile"
+    ]
+  },
+  {
+    "story": 233,
+    "sprint": 2,
+    "title": "Create IDP",
+    "sequenceImage": "image42.png",
+    "expectedCalls": [
+      "CreateIDPPage.submitIDP",
+      "CreateIDPController.createIDP",
+      "IDP.saveIDP",
+      "CreateIDPPage.displayMessage"
+    ]
+  },
+  {
+    "story": 234,
+    "sprint": 2,
+    "title": "Upload Photos and Choose Cover",
+    "sequenceImage": "image91.png",
+    "expectedCalls": [
+      "IDPPhotoPage.submitPhotos",
+      "UploadPhotosController.uploadPhotos",
+      "IDPPhoto.savePhotos",
+      "IDP.setCoverImage",
+      "IDPPhotoPage.displayMessage"
+    ]
+  },
+  {
+    "story": 235,
+    "sprint": 2,
+    "title": "Edit IDP",
+    "sequenceImage": "image112.png",
+    "expectedCalls": [
+      "EditIDPPage.saveChanges",
+      "EditIDPController.editIDP",
+      "IDP.updateIDP",
+      "EditIDPPage.displayMessage"
+    ]
+  },
+  {
+    "story": 236,
+    "sprint": 2,
+    "title": "View Own IDP List",
+    "sequenceImage": "image131.png",
+    "expectedCalls": [
+      "MyProjectsPage.clickMyProjects",
+      "ViewMyIDPsController.getMyIDPs",
+      "IDP.getIDPsByDesigner",
+      "MyProjectsPage.displayIDPList"
+    ]
+  },
+  {
+    "story": 237,
+    "sprint": 2,
+    "title": "Search Published IDPs",
+    "sequenceImage": "image82.png",
+    "expectedCalls": [
+      "SearchPage.searchIDP",
+      "SearchIDPController.searchIDPs",
+      "IDP.findPublishedByKeyword",
+      "SearchPage.displayResults"
+    ]
+  },
+  {
+    "story": 238,
+    "sprint": 2,
+    "title": "View Search Results",
+    "sequenceImage": "image47.png",
+    "expectedCalls": [
+      "SearchResultsPage.submitSearch",
+      "ViewSearchResultsController.getResults",
+      "IDP.findPublishedByKeyword",
+      "SearchResultsPage.displayResults"
+    ]
+  },
+  {
+    "story": 239,
+    "sprint": 2,
+    "title": "View IDP Details and Gallery",
+    "sequenceImage": "image40.png",
+    "expectedCalls": [
+      "IDPDetailPage.selectIDP",
+      "ViewIDPDetailsController.getIDPDetails",
+      "IDP.getIDP",
+      "ViewIDPDetailsController.getGallery",
+      "IDPPhoto.getPhotos",
+      "IDPDetailPage.displayIDPDetails",
+      "IDPDetailPage.displayGallery"
+    ]
+  },
+  {
+    "story": 240,
+    "sprint": 2,
+    "title": "Company Link from IDP",
+    "sequenceImage": "image123.png",
+    "expectedCalls": [
+      "CompanyProfilePage.clickCompanyName",
+      "ViewCompanyProfileController.getCompanyProfile",
+      "Company.getCompanyByIDP",
+      "CompanyProfilePage.displayCompanyProfile"
+    ]
+  },
+  {
+    "story": 242,
+    "sprint": 2,
+    "title": "Save Favourite without Duplicates",
+    "sequenceImage": "image2.png",
+    "expectedCalls": [
+      "IDPDetailPage.saveToFavourites",
+      "SaveFavouriteController.saveFavourite",
+      "Favourite.isFavourited",
+      "Favourite.saveFavourite",
+      "IDPDetailPage.displayMessage"
+    ]
+  },
+  {
+    "story": 263,
+    "sprint": 2,
+    "title": "Publish or Unpublish IDP",
+    "sequenceImage": "image69.png",
+    "expectedCalls": [
+      "MyIDPPage.changePublishStatus",
+      "PublishIDPController.setPublishStatus",
+      "IDP.updateStatus",
+      "MyIDPPage.displayMessage"
+    ]
+  },
+  {
+    "story": 266,
+    "sprint": 2,
+    "title": "Assign IDP Categories",
+    "sequenceImage": "image127.png",
+    "expectedCalls": [
+      "IDPCategoryPage.saveCategories",
+      "AssignCategoriesController.assignCategories",
+      "IDPCategory.saveCategories",
+      "IDPCategoryPage.displayMessage"
+    ]
+  },
+  {
+    "story": 273,
+    "sprint": 2,
+    "title": "View Favourites List",
+    "sequenceImage": "image48.png",
+    "expectedCalls": [
+      "FavouritesPage.clickMyFavourites",
+      "ViewFavouritesController.getFavourites",
+      "Favourite.getFavouriteIDPs",
+      "FavouritesPage.displayFavourites"
+    ]
+  },
+  {
+    "story": 241,
+    "sprint": 3,
+    "title": "Record IDP View",
+    "sequenceImage": "image45.png",
+    "expectedCalls": [
+      "IDPDetailPage.openIDP",
+      "RecordViewController.recordView",
+      "IDP.isPublished",
+      "IDPView.saveView",
+      "IDPView.getViewCount",
+      "IDPDetailPage.displayViewCount"
+    ]
+  },
+  {
+    "story": 243,
+    "sprint": 3,
+    "title": "Record IDP Shortlist",
+    "sequenceImage": "image33.png",
+    "expectedCalls": [
+      "IDPDetailPage.saveIDP",
+      "RecordShortlistController.recordShortlist",
+      "IDPShortlist.isShortlisted",
+      "IDPShortlist.saveShortlist",
+      "IDPShortlist.getShortlistCount",
+      "IDPDetailPage.displayShortlistCount"
+    ]
+  },
+  {
+    "story": 244,
+    "sprint": 3,
+    "title": "Portfolio Totals",
+    "sequenceImage": "image158.png",
+    "expectedCalls": [
+      "DesignerDashboardPage.navigateToDashboard",
+      "ViewTotalStatsController.getTotalStats",
+      "IDP.countIDPs",
+      "IDP.getTotalViews",
+      "IDP.getTotalShortlists",
+      "DesignerDashboardPage.displayTotalStats"
+    ]
+  },
+  {
+    "story": 245,
+    "sprint": 3,
+    "title": "Stats per IDP",
+    "sequenceImage": "image61.png",
+    "expectedCalls": [
+      "DesignerDashboardPage.clickViewByIDP",
+      "ViewIDPStatsController.getStatsPerIDP",
+      "IDP.getStatsByDesigner",
+      "DesignerDashboardPage.displayIDPStatsList"
+    ]
+  },
+  {
+    "story": 246,
+    "sprint": 3,
+    "title": "Create Category",
+    "sequenceImage": "image87.png",
+    "expectedCalls": [
+      "CategoryManagementPage.clickCreateCategory",
+      "CategoryManagementPage.displayCreateForm",
+      "CategoryManagementPage.submitCategory",
+      "CreateCategoryController.createCategory",
+      "Category.nameExists",
+      "Category.saveCategory",
+      "CategoryManagementPage.displaySuccessMsg"
+    ]
+  },
+  {
+    "story": 247,
+    "sprint": 3,
+    "title": "Edit Category",
+    "sequenceImage": "image139.png",
+    "expectedCalls": [
+      "CategoryManagementPage.navigateToCategories",
+      "EditCategoryController.getCategories",
+      "Category.getAllCategories",
+      "CategoryManagementPage.displayCategoryList",
+      "CategoryManagementPage.clickEdit",
+      "CategoryManagementPage.displayEditForm",
+      "CategoryManagementPage.saveCategory",
+      "EditCategoryController.updateCategory",
+      "Category.nameExists",
+      "Category.updateCategory",
+      "CategoryManagementPage.displaySuccessMsg"
+    ]
+  },
+  {
+    "story": 248,
+    "sprint": 3,
+    "title": "Make Category Available",
+    "sequenceImage": "image114.png",
+    "expectedCalls": [
+      "CategoryManagementPage.navigateToCategories",
+      "CategoryAvailabilityController.getCategories",
+      "Category.getAllCategories",
+      "CategoryManagementPage.displayCategoryList",
+      "CategoryManagementPage.toggleAvailable",
+      "CategoryAvailabilityController.setAvailable",
+      "Category.updateAvailability",
+      "CategoryManagementPage.displaySuccessMsg"
+    ]
+  },
+  {
+    "story": 249,
+    "sprint": 3,
+    "title": "Select Report Period",
+    "sequenceImage": "image152.png",
+    "expectedCalls": [
+      "ReportPage.navigateToReports",
+      "ReportPage.displayPeriodOptions",
+      "ReportPage.selectPeriod",
+      "SelectPeriodController.getPeriod",
+      "ReportPeriod.setPeriod",
+      "ReportPeriod.calculateRange",
+      "ReportPage.displayPeriod"
+    ]
+  },
+  {
+    "story": 250,
+    "sprint": 3,
+    "title": "Generate Activity Totals",
+    "sequenceImage": "image135.png",
+    "expectedCalls": [
+      "ReportPage.clickGenerate",
+      "GenerateReportController.generateTotals",
+      "ReportPeriod.setPeriod",
+      "ReportPeriod.calculateRange",
+      "ActivityReport.countNewUsers",
+      "ActivityReport.countNewIDPs",
+      "ActivityReport.countViews",
+      "ActivityReport.countShortlists",
+      "ReportPage.displayTotals"
+    ]
+  },
+  {
+    "story": 251,
+    "sprint": 3,
+    "title": "View Daily Report Table",
+    "sequenceImage": "image74.png",
+    "expectedCalls": [
+      "ReportPage.clickViewAsTable",
+      "ViewReportTableController.getReportRows",
+      "ReportPeriod.setPeriod",
+      "ReportPeriod.calculateRange",
+      "ActivityReport.getDailyRows",
+      "ViewReportTableController.calculateTotalRow",
+      "ReportPage.displayReportTable"
+    ]
+  }
+]

@@ -1,0 +1,10 @@
+target/
+instance/
+meow.jar
+.idea/
+*.iml
+.vscode/
+.env
+.DS_Store
+test/testdata/
+server.log
