@@ -2,7 +2,7 @@
 
 Java implementation of the 36 completed sprint stories. Each use case uses the boundary, controller and entity names from its diagrams.
 
-Needs a Java 17 or newer **JDK** (`java -version` and `javac -version` should both work). The prebuilt `meow.jar` already contains its dependencies, so no database server, Python or Node is needed.
+Needs a Java 17 The prebuilt `meow.jar` already contains its dependencies, so no database server, Python or Node is needed.
 
 ## Windows
 
@@ -12,6 +12,10 @@ Needs a Java 17 or newer **JDK** (`java -version` and `javac -version` should bo
 | `run-tests.bat` | Same reset and the same fixed test data (seed 20261108), then runs the test runner. `run-tests.bat 12345` uses another seed if you want different data. |
 | `start-windows.bat` | Starts MEOW and keeps the existing data. |
 | `build-windows.bat` | Rebuilds `meow.jar` from source with Maven (needs internet the first time). |
+
+Quickstart: 
+Pre-requisite of java 17
+Run start-demo.bat
 
 The server runs in a separate window called "MEOW server". Close that window to stop it. Both demo scripts stop an older MEOW server on the same port first.
 
