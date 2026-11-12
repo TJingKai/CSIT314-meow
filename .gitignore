@@ -1,0 +1,9 @@
+target/
+instance/
+.idea/
+*.iml
+.vscode/
+.env
+.DS_Store
+test/testdata/
+server.log
